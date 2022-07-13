@@ -1,19 +1,22 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
+  create(createUserDto: CreateUserDto): User {
     const id = uuidv4();
-    return {
+    const requestData: User = {
       id,
       login: createUserDto.login,
       version: 1,
       createdAt: +Date.now(),
       updatedAt: +Date.now(),
     };
+    return requestData;
   }
 
   findAll() {
@@ -25,6 +28,7 @@ export class UsersService {
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
+    console.log(updateUserDto);
     return `This action updates a #${id} user`;
   }
 

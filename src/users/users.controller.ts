@@ -7,13 +7,15 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
 import {
   ApiBadRequestResponse,
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+
+import { UsersService } from './users.service';
+import { CreateUserDto, UpdateUserDto } from './dto';
+import { User } from './entities/user.entity';
 
 @Controller('user')
 export class UsersController {
@@ -42,7 +44,7 @@ export class UsersController {
   create(
     @Body()
     createUserDto: CreateUserDto,
-  ) {
+  ): User {
     return this.usersService.create(createUserDto);
   }
 

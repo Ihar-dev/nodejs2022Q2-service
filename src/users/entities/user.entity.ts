@@ -7,9 +7,14 @@ export class User {
   @ApiProperty()
   login: string;
 
-  @ApiProperty()
-  password: string;
+  password?: string;
 
   @ApiProperty()
   version: number;
+
+  @ApiProperty()
+  createdAt: number;
+
+  @ApiProperty()
+  updatedAt: number;
 }
