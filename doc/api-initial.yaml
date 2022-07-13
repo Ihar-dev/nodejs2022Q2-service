@@ -189,7 +189,7 @@ paths:
           description: Bad request
         409:
           description: Conflict. Login already exists
-  /user:
+  /users:
     get:
       tags:
         - Users
@@ -237,6 +237,8 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           description: Bad request. body does not contain required fields
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
   /users/{userId}:
     parameters:
       - name: userId

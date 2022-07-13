@@ -11,8 +11,8 @@ export class UsersService {
       id,
       login: createUserDto.login,
       version: 1,
-      createdAt: 123,
-      updatedAt: 123,
+      createdAt: +Date.now(),
+      updatedAt: +Date.now(),
     };
   }
 
