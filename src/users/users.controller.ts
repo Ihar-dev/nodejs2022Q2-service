@@ -44,7 +44,7 @@ export class UsersController {
   create(
     @Body()
     createUserDto: CreateUserDto,
-  ): User {
+  ): Promise<User> {
     return this.usersService.create(createUserDto);
   }
 
