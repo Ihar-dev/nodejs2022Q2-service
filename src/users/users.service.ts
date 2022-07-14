@@ -44,9 +44,9 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: string) {
-    if (uuidValidate(id)) {
-      const user: User = this.users.find(user => user.id === id);
+  remove(userId: string) {
+    if (uuidValidate(userId)) {
+      const user: User = this.users.find(user => user.id === userId);
       if (user) {
         const index = this.users.indexOf(user);
         this.users.splice(index, 1);
