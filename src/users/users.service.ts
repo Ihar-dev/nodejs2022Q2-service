@@ -1,5 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import { validate as uuidValidate } from 'uuid';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as argon from 'argon2';
 
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,13 +21,13 @@ export class UsersService {
     const newUser: User = {
       id,
       login: createUserDto.login,
+      password: hash,
       version: 1,
-      createdAt: +Date.now(),
-      updatedAt: +Date.now(),
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     };
-    const newDataBaseUser: User = JSON.parse(JSON.stringify(newUser));
-    newDataBaseUser.password = hash;
-    this.users.push(newDataBaseUser);
+    this.users.push(newUser);
+    delete newUser.password;
     return newUser;
   }
 
@@ -30,7 +35,7 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} user`;
   }
 
@@ -39,7 +44,14 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    if (uuidValidate(id)) {
+      const user: User = this.users.find(user => user.id === id);
+      if (user) {
+        const index = this.users.indexOf(user);
+        this.users.splice(index, 1);
+        return 'The user has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 }
