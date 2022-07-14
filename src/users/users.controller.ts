@@ -48,6 +48,21 @@ export class UsersController {
   }
 
   @Get(':userId')
+  @ApiOperation({
+    summary: 'get single user by id',
+    description: 'Gets single user by id.',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    type: User,
+    schema: {
+      example: USER_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. userId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'User not found.' })
   findOne(@Param('userId') userId: string) {
     return this.usersService.findOne(userId);
   }

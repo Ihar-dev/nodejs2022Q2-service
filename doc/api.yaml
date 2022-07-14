@@ -165,7 +165,7 @@ paths:
       tags:
         - Users
       summary: Get single user by id
-      description: Get single user by id
+      description: Gets single user by id
       responses:
         200:
           description: Successful operation
@@ -175,8 +175,6 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           description: Bad request. userId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
         404:
           description: User not found
 
