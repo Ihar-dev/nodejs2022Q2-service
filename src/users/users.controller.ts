@@ -38,8 +38,8 @@ export class UsersController {
   @ApiOperation({ summary: 'get all users', description: 'Gets all users.' })
   @ApiOkResponse({
     description: 'Successful operation.',
+    type: [User],
     schema: {
-      type: 'string',
       example: [USER_EXAMPLE],
     },
   })
@@ -51,8 +51,8 @@ export class UsersController {
   @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
   @ApiCreatedResponse({
     description: 'The user has been created.',
+    type: User,
     schema: {
-      type: 'string',
       example: USER_EXAMPLE,
     },
   })

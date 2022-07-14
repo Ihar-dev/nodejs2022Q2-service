@@ -7,6 +7,7 @@ export class User {
   @ApiProperty()
   login: string;
 
+  @ApiProperty()
   password?: string;
 
   @ApiProperty()
