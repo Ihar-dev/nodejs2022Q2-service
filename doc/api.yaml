@@ -226,8 +226,6 @@ paths:
                     example: 1655999999
         400:
           description: Bad request. userId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
         403:
           description: oldPassowrd is wrong
         404:

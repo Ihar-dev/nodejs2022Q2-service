@@ -11,6 +11,7 @@ import {
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -39,7 +40,6 @@ export class UsersController {
   @ApiOperation({ summary: 'get all users', description: 'Gets all users.' })
   @ApiOkResponse({
     description: 'Successful operation.',
-    type: [User],
     schema: {
       example: [USER_EXAMPLE],
     },
@@ -55,7 +55,6 @@ export class UsersController {
   })
   @ApiOkResponse({
     description: 'Successful operation.',
-    type: User,
     schema: {
       example: USER_EXAMPLE,
     },
@@ -72,7 +71,6 @@ export class UsersController {
   @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
   @ApiCreatedResponse({
     description: 'The user has been created.',
-    type: User,
     schema: {
       example: USER_EXAMPLE,
     },
@@ -89,6 +87,25 @@ export class UsersController {
   }
 
   @Put(':userId')
+  // eslint-disable-next-line prettier/prettier
+  @ApiOperation({ summary: "update user's password", description: "Updates a user's password by ID." })
+  @ApiOkResponse({
+    description: 'The user has been updated.',
+    schema: {
+      example: {
+        id: 'de7018b5-a4d6-4bf8-9651-6a4574f373da',
+        login: 'TEST_LOGIN',
+        version: 2,
+        createAt: 1657746431528,
+        updateAt: 1657834424839,
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. userId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'User not found.' })
+  @ApiForbiddenResponse({ description: 'oldPassword is wrong.' })
   update(
     @Param('userId') userId: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
