@@ -3,9 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -18,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 
 import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 
 const USER_EXAMPLE = {
@@ -87,15 +88,15 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Patch(':userId')
+  @Put(':userId')
   update(
     @Param('userId') userId: string,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
-    return this.usersService.update(+userId, updateUserDto);
+    @Body() updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> {
+    return this.usersService.update(userId, updatePasswordDto);
   }
 
-  //@HttpCode(204)
+  @HttpCode(204)
   @Delete(':userId')
   @ApiOperation({ summary: 'delete user', description: 'Deletes user by ID.' })
   @ApiNoContentResponse({
