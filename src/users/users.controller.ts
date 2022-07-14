@@ -47,6 +47,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get(':userId')
+  findOne(@Param('userId') userId: string) {
+    return this.usersService.findOne(userId);
+  }
+
   @Post()
   @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
   @ApiCreatedResponse({
@@ -66,11 +71,6 @@ export class UsersController {
   ): Promise<User> {
     return this.usersService.create(createUserDto);
   }
-
-  /* @Get(':userId')
-  findOne(@Param('userId') userId: string) {
-    return this.usersService.findOne(+userId);
-  } */
 
   @Patch(':userId')
   update(

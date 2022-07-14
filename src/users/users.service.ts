@@ -35,8 +35,12 @@ export class UsersService {
     return newUser;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} user`;
+  findOne(userId: string): User {
+    if (uuidValidate(userId)) {
+      const user: User = this.users.find(user => user.id === userId);
+      if (user) return user;
+      else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
