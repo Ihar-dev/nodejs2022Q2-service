@@ -9,9 +9,11 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -19,36 +21,45 @@ import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './entities/user.entity';
 
+const USER_EXAMPLE = {
+  id: 'de7018b5-a4d6-4bf8-9651-6a4574f373da',
+  login: 'TEST_LOGIN',
+  version: 1,
+  createAt: 1657746431528,
+  updateAt: 1657746431528,
+};
+
 @ApiTags('Users')
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({ summary: 'get all users', description: 'Gets all users.' })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      type: 'string',
+      example: [USER_EXAMPLE],
+    },
+  })
   findAll(): User[] {
     return this.usersService.findAll();
   }
 
   @Post()
-  @ApiResponse({
-    status: 201,
+  @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
+  @ApiCreatedResponse({
     description: 'The user has been created.',
     schema: {
       type: 'string',
-      example: {
-        userId: 'de7018b5-a4d6-4bf8-9651-6a4574f373da',
-        login: 'TEST_LOGIN',
-        version: 1,
-        createAt: 1657746431528,
-        updateAt: 1657746431528,
-      },
+      example: USER_EXAMPLE,
     },
   })
   @ApiBadRequestResponse({
     description:
       'Bad request. Body does not contain required fields. The fields are not strings.',
   })
-  @ApiOperation({ summary: 'Create user', description: 'Creates a new user.' })
   create(
     @Body()
     createUserDto: CreateUserDto,
@@ -71,15 +82,14 @@ export class UsersController {
 
   //@HttpCode(204)
   @Delete(':userId')
-  @ApiResponse({
-    status: 204,
+  @ApiOperation({ summary: 'delete user', description: 'Deletes user by ID.' })
+  @ApiNoContentResponse({
     description: 'The user has been deleted.',
   })
   @ApiBadRequestResponse({
     description: 'Bad request. userId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
-  @ApiOperation({ summary: 'Delete user', description: 'Deletes user by ID.' })
   remove(@Param('userId') userId: string): string {
     return this.usersService.remove(userId);
   }

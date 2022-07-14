@@ -13,8 +13,8 @@ async function bootstrap() {
   const port = process.env.PORT || 4000;
 
   const config = new DocumentBuilder()
-    .setTitle('REST Service')
-    .setDescription('Music Home Library')
+    .setTitle('Home Library Service')
+    .setDescription('Home music library service')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
