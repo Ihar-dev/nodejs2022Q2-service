@@ -15,6 +15,10 @@ import { User } from './entities/user.entity';
 export class UsersService {
   private readonly users: User[] = [];
 
+  public findAll(): User[] {
+    return this.users;
+  }
+
   public async create(createUserDto: CreateUserDto): Promise<User> {
     const id = uuidv4();
     const hash = await argon.hash(createUserDto.password);
@@ -31,10 +35,6 @@ export class UsersService {
     return newUser;
   }
 
-  findAll() {
-    return `This action returns all users`;
-  }
-
   findOne(id: string) {
     return `This action returns a #${id} user`;
   }
@@ -44,7 +44,7 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  remove(userId: string) {
+  remove(userId: string): string {
     if (uuidValidate(userId)) {
       const user: User = this.users.find(user => user.id === userId);
       if (user) {

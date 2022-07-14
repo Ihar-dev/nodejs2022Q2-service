@@ -24,6 +24,11 @@ import { User } from './entities/user.entity';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get()
+  findAll(): User[] {
+    return this.usersService.findAll();
+  }
+
   @Post()
   @ApiResponse({
     status: 201,
@@ -51,11 +56,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
   /* @Get(':userId')
   findOne(@Param('userId') userId: string) {
     return this.usersService.findOne(+userId);
@@ -80,7 +80,7 @@ export class UsersController {
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
   @ApiOperation({ summary: 'Delete user', description: 'Deletes user by ID.' })
-  remove(@Param('userId') userId: string) {
+  remove(@Param('userId') userId: string): string {
     return this.usersService.remove(userId);
   }
 }
