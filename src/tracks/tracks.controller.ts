@@ -3,10 +3,10 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -85,9 +85,26 @@ export class TracksController {
     return this.tracksService.create(createTrackDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    return this.tracksService.update(+id, updateTrackDto);
+  @Put(':id')
+  @ApiOperation({
+    summary: 'update track info',
+    description: 'Updates library track information by UUID',
+  })
+  @ApiOkResponse({
+    description: 'The track has been updated.',
+    schema: {
+      example: TRACK_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. trackId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Track not found.' })
+  update(
+    @Param('id') id: string,
+    @Body() createTrackDto: CreateTrackDto,
+  ): Promise<Track> {
+    return this.tracksService.update(id, createTrackDto);
   }
 
   @Delete(':id')

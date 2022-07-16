@@ -32,8 +32,17 @@ export class TracksService {
     } else throw new BadRequestException();
   }
 
-  update(id: number, updateTrackDto: UpdateTrackDto) {
-    return `This action updates a #${id} track`;
+  public async update(
+    id: string,
+    createTrackDto: CreateTrackDto,
+  ): Promise<Track> {
+    if (uuidValidate(id)) {
+      let track: Track = this.tracks.find((track) => track.id === id);
+      if (track) {
+        track = { id, ...createTrackDto };
+        return track;
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   public async remove(id: string): Promise<string> {
