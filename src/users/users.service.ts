@@ -34,7 +34,7 @@ export class UsersService {
     return this.getUserWithoutPassword(newUser);
   }
 
-  findOne(userId: string): User {
+  public async findOne(userId: string): Promise<User> {
     if (uuidValidate(userId)) {
       const user: User = this.users.find((user) => user.id === userId);
       if (user) return this.getUserWithoutPassword(user);

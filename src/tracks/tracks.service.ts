@@ -24,8 +24,12 @@ export class TracksService {
     return this.tracks;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} track`;
+  public async findOne(id: string): Promise<Track> {
+    if (uuidValidate(id)) {
+      const track: Track = this.tracks.find((track) => track.id === id);
+      if (track) return track;
+      else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   update(id: number, updateTrackDto: UpdateTrackDto) {
@@ -38,7 +42,7 @@ export class TracksService {
       if (track) {
         const index = this.tracks.indexOf(track);
         this.tracks.splice(index, 1);
-        return 'The user has been deleted';
+        return 'The track has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }

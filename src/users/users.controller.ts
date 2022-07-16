@@ -63,7 +63,7 @@ export class UsersController {
     description: 'Bad request. userId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
-  findOne(@Param('userId') userId: string) {
+  findOne(@Param('userId') userId: string): Promise<User> {
     return this.usersService.findOne(userId);
   }
 

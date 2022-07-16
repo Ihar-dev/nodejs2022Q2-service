@@ -47,10 +47,24 @@ export class TracksController {
     return this.tracksService.findAll();
   }
 
-  /* @Get(':id')
+  @Get(':id')
+  @ApiOperation({
+    summary: 'get single track by id',
+    description: 'Gets single track by id.',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: TRACK_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. trackId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Track not found.' })
   findOne(@Param('id') id: string): Promise<Track> {
-    return this.tracksService.findOne(+id);
-  } */
+    return this.tracksService.findOne(id);
+  }
 
   @Post()
   @ApiOperation({
