@@ -6,16 +6,18 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { CreateTrackDto, UpdateTrackDto } from './dto';
+import { CreateUpdateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 
 @Injectable()
 export class TracksService {
   private readonly tracks: Track[] = [];
 
-  public async create(createTrackDto: CreateTrackDto): Promise<Track> {
+  public async create(
+    createUpdateTrackDto: CreateUpdateTrackDto,
+  ): Promise<Track> {
     const id = uuidv4();
-    const newTrack: Track = { id, ...createTrackDto };
+    const newTrack: Track = { id, ...createUpdateTrackDto };
     this.tracks.push(newTrack);
     return newTrack;
   }
@@ -34,12 +36,12 @@ export class TracksService {
 
   public async update(
     id: string,
-    createTrackDto: CreateTrackDto,
+    createUpdateTrackDto: CreateUpdateTrackDto,
   ): Promise<Track> {
     if (uuidValidate(id)) {
       let track: Track = this.tracks.find((track) => track.id === id);
       if (track) {
-        track = { id, ...createTrackDto };
+        track = { id, ...createUpdateTrackDto };
         return track;
       } else throw new NotFoundException();
     } else throw new BadRequestException();

@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 
 import { TracksService } from './tracks.service';
-import { CreateTrackDto, UpdateTrackDto } from './dto';
+import { CreateUpdateTrackDto } from './dto/create-track.dto';
 import { Track } from './entities/track.entity';
 
 const TRACK_EXAMPLE = {
@@ -81,8 +81,8 @@ export class TracksController {
     description:
       'Bad request. Body does not contain required fields. The fields are not required types.',
   })
-  create(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
-    return this.tracksService.create(createTrackDto);
+  create(@Body() createUpdateTrackDto: CreateUpdateTrackDto): Promise<Track> {
+    return this.tracksService.create(createUpdateTrackDto);
   }
 
   @Put(':id')
@@ -102,9 +102,9 @@ export class TracksController {
   @ApiNotFoundResponse({ description: 'Track not found.' })
   update(
     @Param('id') id: string,
-    @Body() createTrackDto: CreateTrackDto,
+    @Body() createUpdateTrackDto: CreateUpdateTrackDto,
   ): Promise<Track> {
-    return this.tracksService.update(id, createTrackDto);
+    return this.tracksService.update(id, createUpdateTrackDto);
   }
 
   @Delete(':id')
