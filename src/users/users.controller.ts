@@ -88,7 +88,10 @@ export class UsersController {
 
   @Put(':userId')
   // eslint-disable-next-line prettier/prettier
-  @ApiOperation({ summary: "update user's password", description: "Updates a user's password by ID." })
+  @ApiOperation({
+    summary: "update user's password",
+    description: "Updates a user's password by ID.",
+  })
   @ApiOkResponse({
     description: 'The user has been updated.',
     schema: {
@@ -113,8 +116,8 @@ export class UsersController {
     return this.usersService.update(userId, updatePasswordDto);
   }
 
-  @HttpCode(204)
   @Delete(':userId')
+  @HttpCode(204)
   @ApiOperation({ summary: 'delete user', description: 'Deletes user by ID.' })
   @ApiNoContentResponse({
     description: 'The user has been deleted.',
@@ -123,7 +126,7 @@ export class UsersController {
     description: 'Bad request. userId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
-  remove(@Param('userId') userId: string): string {
+  remove(@Param('userId') userId: string): Promise<string> {
     return this.usersService.remove(userId);
   }
 }

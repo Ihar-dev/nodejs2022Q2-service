@@ -8,8 +8,7 @@ import {
 } from '@nestjs/common';
 //import * as argon from 'argon2';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-user.dto';
+import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -60,7 +59,7 @@ export class UsersService {
     } else throw new BadRequestException();
   }
 
-  public remove(userId: string): string {
+  public async remove(userId: string): Promise<string> {
     if (uuidValidate(userId)) {
       const user: User = this.users.find((user) => user.id === userId);
       if (user) {
