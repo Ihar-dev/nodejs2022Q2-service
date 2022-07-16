@@ -20,8 +20,8 @@ export class TracksService {
     return newTrack;
   }
 
-  findAll() {
-    return `This action returns all tracks`;
+  public async findAll(): Promise<Track[]> {
+    return this.tracks;
   }
 
   findOne(id: number) {

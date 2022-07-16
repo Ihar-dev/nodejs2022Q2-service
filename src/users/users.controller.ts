@@ -44,7 +44,7 @@ export class UsersController {
       example: [USER_EXAMPLE],
     },
   })
-  findAll(): User[] {
+  findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 

@@ -15,7 +15,7 @@ import { User } from './entities/user.entity';
 export class UsersService {
   private readonly users: User[] = [];
 
-  public findAll(): User[] {
+  public async findAll(): Promise<User[]> {
     return this.users;
   }
 

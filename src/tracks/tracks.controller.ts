@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -34,6 +35,23 @@ const TRACK_EXAMPLE = {
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
+  @Get()
+  @ApiOperation({ summary: 'get all tracks', description: 'Gets all tracks.' })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: [TRACK_EXAMPLE],
+    },
+  })
+  findAll(): Promise<Track[]> {
+    return this.tracksService.findAll();
+  }
+
+  /* @Get(':id')
+  findOne(@Param('id') id: string): Promise<Track> {
+    return this.tracksService.findOne(+id);
+  } */
+
   @Post()
   @ApiOperation({
     summary: 'create new track',
@@ -51,16 +69,6 @@ export class TracksController {
   })
   create(@Body() createTrackDto: CreateTrackDto): Promise<Track> {
     return this.tracksService.create(createTrackDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.tracksService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tracksService.findOne(+id);
   }
 
   @Patch(':id')
