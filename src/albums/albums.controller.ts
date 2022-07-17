@@ -53,6 +53,13 @@ export class AlbumsController {
   }
 
   @Get()
+  @ApiOperation({ summary: 'get all albums', description: 'Gets all albums.' })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: [ALBUM_EXAMPLE],
+    },
+  })
   findAll() {
     return this.albumsService.findAll();
   }

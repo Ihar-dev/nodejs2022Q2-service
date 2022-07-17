@@ -25,8 +25,8 @@ export class AlbumsService {
     return newAlbum;
   }
 
-  findAll() {
-    return `This action returns all albums`;
+  public async findAll(): Promise<Album[]> {
+    return this.albums;
   }
 
   findOne(id: string) {
