@@ -20,6 +20,7 @@ import {
 
 import { FavoritesService } from './favorites.service';
 import { Favorites } from './entities/favorite.entity';
+import { FavoritesResponse } from './favorites.service';
 
 @ApiTags('Favorites')
 @Controller('favs')
@@ -84,7 +85,7 @@ export class FavoritesController {
   }
 
   @Get()
-  findAll(): Promise<Favorites> {
+  findAll(): Promise<FavoritesResponse> {
     return this.favoritesService.findAll();
   }
 
@@ -101,7 +102,7 @@ export class FavoritesController {
     description: 'Bad request. trackId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Track not found.' })
-  removeTrack(@Param('id') id: string): Promise<string> {
+  removeTrack(@Param('id') id: string): string {
     return this.favoritesService.removeTrack(id);
   }
 
@@ -118,7 +119,7 @@ export class FavoritesController {
     description: 'Bad request. albumId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Album not found.' })
-  removeAlbum(@Param('id') id: string): Promise<string> {
+  removeAlbum(@Param('id') id: string): string {
     return this.favoritesService.removeAlbum(id);
   }
 
@@ -135,7 +136,7 @@ export class FavoritesController {
     description: 'Bad request. artistId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Artist not found.' })
-  removeArtist(@Param('id') id: string): Promise<string> {
+  removeArtist(@Param('id') id: string): string {
     return this.favoritesService.removeArtist(id);
   }
 }

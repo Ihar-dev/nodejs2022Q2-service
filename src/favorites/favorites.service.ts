@@ -11,8 +11,16 @@ import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
 import { Track } from '../tracks/entities/track.entity';
+import { Artist } from '../artists/entities/artist.entity';
+import { Album } from '../albums/entities/album.entity';
 
 const NO_EXISTING_CODE = 422;
+
+export type FavoritesResponse = {
+  artists: string[] | Artist[];
+  albums: string[] | Album[];
+  tracks: string[] | Track[];
+};
 
 @Injectable()
 export class FavoritesService {
@@ -32,7 +40,7 @@ export class FavoritesService {
     if (uuidValidate(id)) {
       try {
         await this.tracksService.findOne(id);
-        this.favorites.tracks.push(id);
+        await this.favorites.tracks.push(id);
         return 'Added successfully';
       } catch (err) {
         throw new HttpException(
@@ -50,7 +58,7 @@ export class FavoritesService {
     if (uuidValidate(id)) {
       try {
         await this.albumsService.findOne(id);
-        this.favorites.albums.push(id);
+        await this.favorites.albums.push(id);
         return 'Added successfully';
       } catch (err) {
         throw new HttpException(
@@ -68,7 +76,7 @@ export class FavoritesService {
     if (uuidValidate(id)) {
       try {
         await this.artistsService.findOne(id);
-        this.favorites.artists.push(id);
+        await this.favorites.artists.push(id);
         return 'Added successfully';
       } catch (err) {
         throw new HttpException(
@@ -82,11 +90,31 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
-  public async findAll(): Promise<Favorites> {
-    return this.favorites;
+  public async findAll(): Promise<FavoritesResponse> {
+    const favorites: FavoritesResponse = {
+      artists: [...this.favorites.artists],
+      tracks: [...this.favorites.tracks],
+      albums: [...this.favorites.albums],
+    };
+    try {
+      favorites.tracks = await Promise.all(
+        favorites.tracks.map((trackId) => this.tracksService.findOne(trackId)),
+      );
+      favorites.albums = await Promise.all(
+        favorites.albums.map((albumId) => this.albumsService.findOne(albumId)),
+      );
+      favorites.artists = await Promise.all(
+        favorites.artists.map((artistId) =>
+          this.artistsService.findOne(artistId),
+        ),
+      );
+      return favorites;
+    } catch (err) {
+      return favorites;
+    }
   }
 
-  public async removeTrack(id: string): Promise<string> {
+  public removeTrack(id: string): string {
     if (uuidValidate(id)) {
       const trackId: string = this.favorites.tracks.find(
         (trackId) => trackId === id,
@@ -99,7 +127,7 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
-  public async removeAlbum(id: string): Promise<string> {
+  public removeAlbum(id: string): string {
     if (uuidValidate(id)) {
       const albumId: string = this.favorites.albums.find(
         (albumId) => albumId === id,
@@ -112,7 +140,7 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
-  public async removeArtist(id: string): Promise<string> {
+  public removeArtist(id: string): string {
     if (uuidValidate(id)) {
       const artistId: string = this.favorites.artists.find(
         (artistId) => artistId === id,

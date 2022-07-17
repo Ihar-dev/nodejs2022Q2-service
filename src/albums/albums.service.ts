@@ -21,7 +21,7 @@ export class AlbumsService {
   ): Promise<Album> {
     const id = uuidv4();
     const newAlbum: Album = { id, ...createUpdateAlbumDto };
-    this.albums.push(newAlbum);
+    await this.albums.push(newAlbum);
     return newAlbum;
   }
 
@@ -31,7 +31,7 @@ export class AlbumsService {
 
   public async findOne(id: string): Promise<Album> {
     if (uuidValidate(id)) {
-      const album: Album = this.albums.find((album) => album.id === id);
+      const album: Album = await this.albums.find((album) => album.id === id);
       if (album) return album;
       else throw new NotFoundException();
     } else throw new BadRequestException();

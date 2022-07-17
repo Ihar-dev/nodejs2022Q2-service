@@ -25,7 +25,7 @@ export class ArtistsService {
   ): Promise<Artist> {
     const id = uuidv4();
     const newArtist: Artist = { id, ...createUpdateArtistDto };
-    this.artists.push(newArtist);
+    await this.artists.push(newArtist);
     return newArtist;
   }
 
@@ -35,7 +35,9 @@ export class ArtistsService {
 
   public async findOne(id: string): Promise<Artist> {
     if (uuidValidate(id)) {
-      const artist: Artist = this.artists.find((artist) => artist.id === id);
+      const artist: Artist = await this.artists.find(
+        (artist) => artist.id === id,
+      );
       if (artist) return artist;
       else throw new NotFoundException();
     } else throw new BadRequestException();

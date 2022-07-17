@@ -18,7 +18,7 @@ export class TracksService {
   ): Promise<Track> {
     const id = uuidv4();
     const newTrack: Track = { id, ...createUpdateTrackDto };
-    this.tracks.push(newTrack);
+    await this.tracks.push(newTrack);
     return newTrack;
   }
 
@@ -28,7 +28,7 @@ export class TracksService {
 
   public async findOne(id: string): Promise<Track> {
     if (uuidValidate(id)) {
-      const track: Track = this.tracks.find((track) => track.id === id);
+      const track: Track = await this.tracks.find((track) => track.id === id);
       if (track) return track;
       else throw new NotFoundException();
     } else throw new BadRequestException();
