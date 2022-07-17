@@ -111,4 +111,17 @@ export class FavoritesService {
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }
+
+  public async removeArtist(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      const artistId: string = this.favorites.artists.find(
+        (artistId) => artistId === id,
+      );
+      if (artistId) {
+        const index = this.favorites.artists.indexOf(artistId);
+        this.favorites.artists.splice(index, 1);
+        return 'The track has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
+  }
 }
