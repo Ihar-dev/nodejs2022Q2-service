@@ -68,8 +68,22 @@ export class ArtistsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.artistsService.findOne(+id);
+  @ApiOperation({
+    summary: 'get single artist by id',
+    description: 'Gets single artist by id.',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: ARTIST_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. artistId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Artist not found.' })
+  findOne(@Param('id') id: string): Promise<Artist> {
+    return this.artistsService.findOne(id);
   }
 
   @Patch(':id')

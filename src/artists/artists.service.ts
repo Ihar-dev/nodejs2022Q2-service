@@ -26,8 +26,12 @@ export class ArtistsService {
     return this.artists;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} artist`;
+  public async findOne(id: string): Promise<Artist> {
+    if (uuidValidate(id)) {
+      const artist: Artist = this.artists.find((artist) => artist.id === id);
+      if (artist) return artist;
+      else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   update(id: number, createUpdateArtistDto: CreateUpdateArtistDto) {
