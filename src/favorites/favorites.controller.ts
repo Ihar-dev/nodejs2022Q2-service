@@ -104,4 +104,21 @@ export class FavoritesController {
   removeTrack(@Param('id') id: string): Promise<string> {
     return this.favoritesService.removeTrack(id);
   }
+
+  @Delete('album/:id')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'delete album from favorites',
+    description: 'Deletes album by ID.',
+  })
+  @ApiNoContentResponse({
+    description: 'The album has been deleted.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. albumId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Album not found.' })
+  removeAlbum(@Param('id') id: string): Promise<string> {
+    return this.favoritesService.removeAlbum(id);
+  }
 }

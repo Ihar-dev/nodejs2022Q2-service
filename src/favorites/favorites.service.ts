@@ -98,4 +98,17 @@ export class FavoritesService {
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }
+
+  public async removeAlbum(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      const albumId: string = this.favorites.albums.find(
+        (albumId) => albumId === id,
+      );
+      if (albumId) {
+        const index = this.favorites.albums.indexOf(albumId);
+        this.favorites.albums.splice(index, 1);
+        return 'The track has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
+  }
 }
