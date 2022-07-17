@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpCode,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -48,8 +49,10 @@ export class ArtistsController {
     description:
       'Bad request. Body does not contain required fields. The fields are not required types.',
   })
-  create(@Body() createArtistDto: CreateUpdateArtistDto): Promise<Artist> {
-    return this.artistsService.create(createArtistDto);
+  create(
+    @Body() createUpdateArtistDto: CreateUpdateArtistDto,
+  ): Promise<Artist> {
+    return this.artistsService.create(createUpdateArtistDto);
   }
 
   @Get()
@@ -86,12 +89,26 @@ export class ArtistsController {
     return this.artistsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @ApiOperation({
+    summary: 'update artist info',
+    description: 'Update artist information by UUID.',
+  })
+  @ApiOkResponse({
+    description: 'The artist has been updated.',
+    schema: {
+      example: ARTIST_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. artistId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Artist not found.' })
   update(
     @Param('id') id: string,
-    @Body() updateArtistDto: CreateUpdateArtistDto,
-  ) {
-    return this.artistsService.update(+id, updateArtistDto);
+    @Body() createUpdateArtistDto: CreateUpdateArtistDto,
+  ): Promise<Artist> {
+    return this.artistsService.update(id, createUpdateArtistDto);
   }
 
   @Delete(':id')

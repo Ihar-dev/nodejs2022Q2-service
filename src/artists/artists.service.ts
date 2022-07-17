@@ -34,8 +34,17 @@ export class ArtistsService {
     } else throw new BadRequestException();
   }
 
-  update(id: number, createUpdateArtistDto: CreateUpdateArtistDto) {
-    return `This action updates a #${id} artist`;
+  public async update(
+    id: string,
+    createUpdateArtistDto: CreateUpdateArtistDto,
+  ): Promise<Artist> {
+    if (uuidValidate(id)) {
+      let artist: Artist = this.artists.find((artist) => artist.id === id);
+      if (artist) {
+        artist = { id, ...createUpdateArtistDto };
+        return artist;
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   public async remove(id: string): Promise<string> {

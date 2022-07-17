@@ -88,7 +88,7 @@ export class TracksController {
   @Put(':id')
   @ApiOperation({
     summary: 'update track info',
-    description: 'Updates library track information by UUID',
+    description: 'Updates library track information by UUID.',
   })
   @ApiOkResponse({
     description: 'The track has been updated.',
