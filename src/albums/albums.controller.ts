@@ -8,16 +8,15 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
+import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 
 @Controller('albums')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumsService.create(createAlbumDto);
+  create(@Body() createUpdateAlbumDto: CreateUpdateAlbumDto) {
+    return this.albumsService.create(createUpdateAlbumDto);
   }
 
   @Get()
@@ -27,16 +26,19 @@ export class AlbumsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.albumsService.findOne(+id);
+    return this.albumsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
-    return this.albumsService.update(+id, updateAlbumDto);
+  update(
+    @Param('id') id: string,
+    @Body() createUpdateAlbumDto: CreateUpdateAlbumDto,
+  ) {
+    return this.albumsService.update(id, createUpdateAlbumDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.albumsService.remove(+id);
+    return this.albumsService.remove(id);
   }
 }

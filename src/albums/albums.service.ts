@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAlbumDto } from './dto/create-album.dto';
-import { UpdateAlbumDto } from './dto/update-album.dto';
+import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 
 @Injectable()
 export class AlbumsService {
-  create(createAlbumDto: CreateAlbumDto) {
+  create(createUpdateAlbumDto: CreateUpdateAlbumDto) {
     return 'This action adds a new album';
   }
 
@@ -12,15 +11,15 @@ export class AlbumsService {
     return `This action returns all albums`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} album`;
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
+  update(id: string, createUpdateAlbumDto: CreateUpdateAlbumDto) {
     return `This action updates a #${id} album`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} album`;
   }
 }
