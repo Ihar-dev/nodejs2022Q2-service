@@ -70,3 +70,52 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+
+# Recommendations from the developer:
+
+## Installation:
+
+Use your terminal command line interface
+
+$ git clone https://github.com/Ihar-dev/nodejs2022Q2-service.git
+
+or
+
+$ git clone git@github.com:Ihar-dev/nodejs2022Q2-service.git
+
+then
+$ cd nodejs2022Q2-service
+
+$ git checkout develop
+
+$ npm i
+
+## How to Use The Application:
+
+development
+$ npm run start
+
+watch mode
+$ npm run start:dev
+
+production mode
+$ npm run start:prod
+previously
+$ npm run build
+
+you can open any of both swaggers
+
+open URL http://localhost:5000/doc with your browser (only for reading)
+
+open URL http://localhost:4000/doc with your browser (optional)
+
+Service listens on PORT 4000 by default, PORT value is stored in .env file.
+
+## Testing:
+
+in an additional terminal after the application starting
+
+$ cd nodejs2022Q2-service
+
+$ npm run test
