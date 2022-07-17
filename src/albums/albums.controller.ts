@@ -3,16 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
+  Put,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -61,11 +62,25 @@ export class AlbumsController {
     return this.albumsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @ApiOperation({
+    summary: 'update album info',
+    description: 'Updates library album information by UUID.',
+  })
+  @ApiOkResponse({
+    description: 'The album has been updated.',
+    schema: {
+      example: ALBUM_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. albumId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Album not found.' })
   update(
     @Param('id') id: string,
     @Body() createUpdateAlbumDto: CreateUpdateAlbumDto,
-  ) {
+  ): Promise<Album> {
     return this.albumsService.update(id, createUpdateAlbumDto);
   }
 

@@ -33,8 +33,17 @@ export class AlbumsService {
     return `This action returns a #${id} album`;
   }
 
-  update(id: string, createUpdateAlbumDto: CreateUpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  public async update(
+    id: string,
+    createUpdateAlbumDto: CreateUpdateAlbumDto,
+  ): Promise<Album> {
+    if (uuidValidate(id)) {
+      let album: Album = this.albums.find((album) => album.id === id);
+      if (album) {
+        album = { id, ...createUpdateAlbumDto };
+        return album;
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   public async remove(id: string): Promise<string> {
