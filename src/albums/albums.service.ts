@@ -1,10 +1,21 @@
+import { v4 as uuidv4 } from 'uuid';
+import { validate as uuidValidate } from 'uuid';
 import { Injectable } from '@nestjs/common';
+
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
+import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
-  create(createUpdateAlbumDto: CreateUpdateAlbumDto) {
-    return 'This action adds a new album';
+  private readonly albums: Album[] = [];
+
+  public async create(
+    createUpdateAlbumDto: CreateUpdateAlbumDto,
+  ): Promise<Album> {
+    const id = uuidv4();
+    const newAlbum: Album = { id, ...createUpdateAlbumDto };
+    this.albums.push(newAlbum);
+    return newAlbum;
   }
 
   findAll() {

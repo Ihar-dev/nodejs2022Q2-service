@@ -7,15 +7,44 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+
 import { AlbumsService } from './albums.service';
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
+import { Album } from './entities/album.entity';
 
-@Controller('albums')
+const ALBUM_EXAMPLE = {
+  name: 'string',
+  year: 2015,
+  artistId: 'c47daf6f-59ba-4a06-a578-2334fa1502dd',
+};
+
+@ApiTags('Albums')
+@Controller('album')
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
-  create(@Body() createUpdateAlbumDto: CreateUpdateAlbumDto) {
+  @ApiOperation({
+    summary: 'create new album',
+    description: 'Creates a new album.',
+  })
+  @ApiCreatedResponse({
+    description: 'The album has been created.',
+    schema: {
+      example: ALBUM_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description:
+      'Bad request. Body does not contain required fields. The fields are not required types.',
+  })
+  create(@Body() createUpdateAlbumDto: CreateUpdateAlbumDto): Promise<Album> {
     return this.albumsService.create(createUpdateAlbumDto);
   }
 
