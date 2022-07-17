@@ -8,10 +8,13 @@ import {
 
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
+import { TracksService } from '../tracks/tracks.service';
 
 @Injectable()
 export class AlbumsService {
   private readonly albums: Album[] = [];
+
+  constructor(private readonly tracksService: TracksService) {}
 
   public async create(
     createUpdateAlbumDto: CreateUpdateAlbumDto,
@@ -40,8 +43,15 @@ export class AlbumsService {
       if (album) {
         const index = this.albums.indexOf(album);
         this.albums.splice(index, 1);
+        this.tracksService.removeAlbum(id);
         return 'The track has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
+  }
+
+  public async removeArtist(id): Promise<void> {
+    this.albums.forEach((album) => {
+      if (album.artistId === id) album.artistId = null;
+    });
   }
 }

@@ -8,10 +8,17 @@ import {
 
 import { CreateUpdateArtistDto } from './dto/create-update-artist.dto';
 import { Artist } from './entities/artist.entity';
+import { AlbumsService } from '../albums/albums.service';
+import { TracksService } from '../tracks/tracks.service';
 
 @Injectable()
 export class ArtistsService {
   private readonly artists: Artist[] = [];
+
+  constructor(
+    private readonly albumsService: AlbumsService,
+    private readonly tracksService: TracksService,
+  ) {}
 
   public async create(
     createUpdateArtistDto: CreateUpdateArtistDto,
@@ -53,6 +60,8 @@ export class ArtistsService {
       if (artist) {
         const index = this.artists.indexOf(artist);
         this.artists.splice(index, 1);
+        this.albumsService.removeArtist(id);
+        this.tracksService.removeArtist(id);
         return 'The artist has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();

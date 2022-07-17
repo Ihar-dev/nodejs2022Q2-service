@@ -57,4 +57,16 @@ export class TracksService {
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }
+
+  public async removeArtist(id): Promise<void> {
+    this.tracks.forEach((track) => {
+      if (track.artistId === id) track.artistId = null;
+    });
+  }
+
+  public async removeAlbum(id): Promise<void> {
+    this.tracks.forEach((track) => {
+      if (track.albumId === id) track.albumId = null;
+    });
+  }
 }
