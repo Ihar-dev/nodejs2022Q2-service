@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -85,13 +88,20 @@ export class FavoritesController {
     return this.favoritesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.favoritesService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.favoritesService.remove(+id);
+  @Delete('track/:id')
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'delete track from favorites',
+    description: 'Deletes track by ID.',
+  })
+  @ApiNoContentResponse({
+    description: 'The track has been deleted.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. trackId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Track not found.' })
+  removeTrack(@Param('id') id: string): Promise<string> {
+    return this.favoritesService.removeTrack(id);
   }
 }

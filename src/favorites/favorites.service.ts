@@ -1,10 +1,16 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { validate as uuidValidate } from 'uuid';
 
 import { Favorites } from './entities/favorite.entity';
 import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
+import { Track } from '../tracks/entities/track.entity';
 
 const NO_EXISTING_CODE = 422;
 
@@ -80,11 +86,16 @@ export class FavoritesService {
     return this.favorites;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  public async removeTrack(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      const trackId: string = this.favorites.tracks.find(
+        (trackId) => trackId === id,
+      );
+      if (trackId) {
+        const index = this.favorites.tracks.indexOf(trackId);
+        this.favorites.tracks.splice(index, 1);
+        return 'The track has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 }
