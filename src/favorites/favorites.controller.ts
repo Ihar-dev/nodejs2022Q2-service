@@ -42,6 +42,44 @@ export class FavoritesController {
     return this.favoritesService.addTrack(id);
   }
 
+  @Post('album/:id')
+  @ApiOperation({
+    summary: 'add album to the favorites',
+    description: 'Adds album to the favorites.',
+  })
+  @ApiCreatedResponse({
+    description: 'Added successfully.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. albumId is invalid (not uuid).',
+  })
+  @ApiResponse({
+    status: 422,
+    description: "Album with id doesn't exist.",
+  })
+  addAlbum(@Param('id') id: string): Promise<string> {
+    return this.favoritesService.addAlbum(id);
+  }
+
+  @Post('artist/:id')
+  @ApiOperation({
+    summary: 'add artist to the favorites',
+    description: 'Adds artist to the favorites.',
+  })
+  @ApiCreatedResponse({
+    description: 'Added successfully.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. artistId is invalid (not uuid).',
+  })
+  @ApiResponse({
+    status: 422,
+    description: "Artist with id doesn't exist.",
+  })
+  addArtist(@Param('id') id: string): Promise<string> {
+    return this.favoritesService.addArtist(id);
+  }
+
   @Get()
   findAll(): Promise<Favorites> {
     return this.favoritesService.findAll();

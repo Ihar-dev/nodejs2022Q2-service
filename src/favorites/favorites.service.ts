@@ -40,6 +40,42 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
+  public async addAlbum(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      try {
+        await this.albumsService.findOne(id);
+        this.favorites.albums.push(id);
+        return 'Added successfully';
+      } catch (err) {
+        throw new HttpException(
+          {
+            status: NO_EXISTING_CODE,
+            error: "Album with id doesn't exist.",
+          },
+          NO_EXISTING_CODE,
+        );
+      }
+    } else throw new BadRequestException();
+  }
+
+  public async addArtist(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      try {
+        await this.artistsService.findOne(id);
+        this.favorites.artists.push(id);
+        return 'Added successfully';
+      } catch (err) {
+        throw new HttpException(
+          {
+            status: NO_EXISTING_CODE,
+            error: "Artist with id doesn't exist.",
+          },
+          NO_EXISTING_CODE,
+        );
+      }
+    } else throw new BadRequestException();
+  }
+
   public async findAll(): Promise<Favorites> {
     return this.favorites;
   }
