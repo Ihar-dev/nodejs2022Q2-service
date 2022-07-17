@@ -1,10 +1,21 @@
+import { v4 as uuidv4 } from 'uuid';
+import { validate as uuidValidate } from 'uuid';
 import { Injectable } from '@nestjs/common';
+
 import { CreateUpdateArtistDto } from './dto/create-update-artist.dto';
+import { Artist } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistsService {
-  create(createUpdateArtistDto: CreateUpdateArtistDto) {
-    return 'This action adds a new artist';
+  private readonly artists: Artist[] = [];
+
+  public async create(
+    createUpdateArtistDto: CreateUpdateArtistDto,
+  ): Promise<Artist> {
+    const id = uuidv4();
+    const newArtist: Artist = { id, ...createUpdateArtistDto };
+    this.artists.push(newArtist);
+    return newArtist;
   }
 
   findAll() {
