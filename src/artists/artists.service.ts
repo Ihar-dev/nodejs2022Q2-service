@@ -22,8 +22,8 @@ export class ArtistsService {
     return newArtist;
   }
 
-  findAll() {
-    return `This action returns all artists`;
+  public async findAll(): Promise<Artist[]> {
+    return this.artists;
   }
 
   findOne(id: number) {

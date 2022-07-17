@@ -13,6 +13,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -52,7 +53,17 @@ export class ArtistsController {
   }
 
   @Get()
-  findAll() {
+  @ApiOperation({
+    summary: 'get all artists',
+    description: 'Gets all artists.',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: [ARTIST_EXAMPLE],
+    },
+  })
+  findAll(): Promise<Artist[]> {
     return this.artistsService.findAll();
   }
 
