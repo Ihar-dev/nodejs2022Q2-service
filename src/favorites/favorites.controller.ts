@@ -75,7 +75,7 @@ export class FavoritesController {
   }
 
   @Get()
-  findAll(): Promise<FavoritesResponse> {
+  findAll() {
     return this.favoritesService.findAll();
   }
 

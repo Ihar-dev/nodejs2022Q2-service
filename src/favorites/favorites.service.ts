@@ -90,7 +90,7 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
-  public async findAll(): Promise<FavoritesResponse> {
+  public async findAll() {
     const favorites: FavoritesResponse = {
       artists: [...this.favorites.artists],
       tracks: [...this.favorites.tracks],
