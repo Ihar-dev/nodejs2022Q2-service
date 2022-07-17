@@ -60,12 +60,26 @@ export class AlbumsController {
       example: [ALBUM_EXAMPLE],
     },
   })
-  findAll() {
+  findAll(): Promise<Album[]> {
     return this.albumsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @ApiOperation({
+    summary: 'get single album by id',
+    description: 'Gets single album by id.',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+    schema: {
+      example: ALBUM_EXAMPLE,
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. albumId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Album not found.' })
+  findOne(@Param('id') id: string): Promise<Album> {
     return this.albumsService.findOne(id);
   }
 

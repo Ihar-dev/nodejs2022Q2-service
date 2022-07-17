@@ -29,8 +29,12 @@ export class AlbumsService {
     return this.albums;
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} album`;
+  public async findOne(id: string): Promise<Album> {
+    if (uuidValidate(id)) {
+      const album: Album = this.albums.find((album) => album.id === id);
+      if (album) return album;
+      else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 
   public async update(
