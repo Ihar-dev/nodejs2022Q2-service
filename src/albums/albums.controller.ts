@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -67,7 +70,19 @@ export class AlbumsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'delete album',
+    description: 'Deletes album by ID.',
+  })
+  @ApiNoContentResponse({
+    description: 'The album has been deleted.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. albumId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Album not found.' })
+  remove(@Param('id') id: string): Promise<string> {
     return this.albumsService.remove(id);
   }
 }

@@ -1,6 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
@@ -30,7 +34,14 @@ export class AlbumsService {
     return `This action updates a #${id} album`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} album`;
+  public async remove(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      const album: Album = this.albums.find((album) => album.id === id);
+      if (album) {
+        const index = this.albums.indexOf(album);
+        this.albums.splice(index, 1);
+        return 'The track has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 }
