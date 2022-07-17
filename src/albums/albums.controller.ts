@@ -79,7 +79,7 @@ export class AlbumsController {
     description: 'Bad request. albumId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Album not found.' })
-  findOne(@Param('id') id: string): Promise<Album> {
+  findOne(@Param('id') id: string): Album {
     return this.albumsService.findOne(id);
   }
 

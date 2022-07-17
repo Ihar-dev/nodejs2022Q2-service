@@ -29,9 +29,9 @@ export class AlbumsService {
     return this.albums;
   }
 
-  public async findOne(id: string): Promise<Album> {
+  public findOne(id: string): Album {
     if (uuidValidate(id)) {
-      const album: Album = await this.albums.find((album) => album.id === id);
+      const album: Album = this.albums.find((album) => album.id === id);
       if (album) return album;
       else throw new NotFoundException();
     } else throw new BadRequestException();

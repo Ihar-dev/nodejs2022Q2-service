@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpCode,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Delete, HttpCode } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -19,7 +10,6 @@ import {
 } from '@nestjs/swagger';
 
 import { FavoritesService } from './favorites.service';
-import { Favorites } from './entities/favorite.entity';
 import { FavoritesResponse } from './favorites.service';
 
 @ApiTags('Favorites')
