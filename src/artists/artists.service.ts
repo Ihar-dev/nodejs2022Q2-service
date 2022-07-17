@@ -1,6 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { CreateUpdateArtistDto } from './dto/create-update-artist.dto';
 import { Artist } from './entities/artist.entity';
@@ -30,7 +34,14 @@ export class ArtistsService {
     return `This action updates a #${id} artist`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  public async remove(id: string): Promise<string> {
+    if (uuidValidate(id)) {
+      const artist: Artist = this.artists.find((artist) => artist.id === id);
+      if (artist) {
+        const index = this.artists.indexOf(artist);
+        this.artists.splice(index, 1);
+        return 'The artist has been deleted';
+      } else throw new NotFoundException();
+    } else throw new BadRequestException();
   }
 }

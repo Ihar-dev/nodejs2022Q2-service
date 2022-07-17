@@ -6,10 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -25,7 +28,7 @@ const ARTIST_EXAMPLE = {
 };
 
 @ApiTags('Artists')
-@Controller('artists')
+@Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
@@ -67,7 +70,19 @@ export class ArtistsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.artistsService.remove(+id);
+  @HttpCode(204)
+  @ApiOperation({
+    summary: 'delete artist',
+    description: 'Deletes artist by ID.',
+  })
+  @ApiNoContentResponse({
+    description: 'The artist has been deleted.',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request. artistId is invalid (not uuid).',
+  })
+  @ApiNotFoundResponse({ description: 'Artist not found.' })
+  remove(@Param('id') id: string): Promise<string> {
+    return this.artistsService.remove(id);
   }
 }
