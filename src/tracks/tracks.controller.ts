@@ -19,7 +19,7 @@ import {
 } from '@nestjs/swagger';
 
 import { TracksService } from './tracks.service';
-import { CreateUpdateTrackDto } from './dto/create-track.dto';
+import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 
 const TRACK_EXAMPLE = {

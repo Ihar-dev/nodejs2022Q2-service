@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { CreateUpdateTrackDto } from './dto/create-track.dto';
+import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 
 @Injectable()
