@@ -12,17 +12,9 @@ import { Favorites } from './entities/favorite.entity';
 import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
-import { Track } from '../tracks/entities/track.entity';
-import { Artist } from '../artists/entities/artist.entity';
-import { Album } from '../albums/entities/album.entity';
+import { FavoritesResponse } from './entities/favorite-response.entity';
 
 const NO_EXISTING_CODE = 422;
-
-export type FavoritesResponse = {
-  artists: string[] | Artist[];
-  albums: string[] | Album[];
-  tracks: string[] | Track[];
-};
 
 @Injectable()
 export class FavoritesService {
@@ -95,28 +87,24 @@ export class FavoritesService {
     } else throw new BadRequestException();
   }
 
-  public async findAll() {
+  public async findAll(): Promise<FavoritesResponse> {
     const favorites: FavoritesResponse = {
       artists: [...this.favorites.artists],
       tracks: [...this.favorites.tracks],
       albums: [...this.favorites.albums],
     };
-    try {
-      favorites.tracks = await Promise.all(
-        favorites.tracks.map((trackId) => this.tracksService.findOne(trackId)),
-      );
-      favorites.albums = await Promise.all(
-        favorites.albums.map((albumId) => this.albumsService.findOne(albumId)),
-      );
-      favorites.artists = await Promise.all(
-        favorites.artists.map((artistId) =>
-          this.artistsService.findOne(artistId),
-        ),
-      );
-      return favorites;
-    } catch (err) {
-      return favorites;
-    }
+    favorites.tracks = await Promise.all(
+      favorites.tracks.map((trackId) => this.tracksService.findOne(trackId)),
+    );
+    favorites.albums = await Promise.all(
+      favorites.albums.map((albumId) => this.albumsService.findOne(albumId)),
+    );
+    favorites.artists = await Promise.all(
+      favorites.artists.map((artistId) =>
+        this.artistsService.findOne(artistId),
+      ),
+    );
+    return favorites;
   }
 
   public removeTrack(id: string): string {

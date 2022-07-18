@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 
 import { FavoritesService } from './favorites.service';
-import { FavoritesResponse } from './favorites.service';
+import { FavoritesResponse } from './entities/favorite-response.entity';
 
 @ApiTags('Favorites')
 @Controller('favs')
@@ -111,7 +111,7 @@ export class FavoritesController {
       },
     },
   })
-  findAll() {
+  findAll(): Promise<FavoritesResponse> {
     return this.favoritesService.findAll();
   }
 

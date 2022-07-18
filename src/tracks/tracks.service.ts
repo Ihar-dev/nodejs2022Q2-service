@@ -36,7 +36,7 @@ export class TracksService {
 
   public async findOne(id: string): Promise<Track> {
     if (uuidValidate(id)) {
-      const track: Track = await this.tracks.find((track) => track.id === id);
+      const track: Track = this.tracks.find((track) => track.id === id);
       if (track) return track;
       else throw new NotFoundException();
     } else throw new BadRequestException();
@@ -63,10 +63,8 @@ export class TracksService {
         this.tracks.splice(index, 1);
         try {
           this.favoritesService.removeTrack(id);
-          return 'The track has been deleted';
-        } catch (err) {
-          return 'The track has been deleted';
-        }
+        } catch (err) {}
+        return 'The track has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }

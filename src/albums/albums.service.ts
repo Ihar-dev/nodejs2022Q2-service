@@ -67,10 +67,8 @@ export class AlbumsService {
         this.tracksService.removeAlbum(id);
         try {
           this.favoritesService.removeAlbum(id);
-          return 'The track has been deleted';
-        } catch (err) {
-          return 'The track has been deleted';
-        }
+        } catch (err) {}
+        return 'The track has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }

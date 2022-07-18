@@ -41,9 +41,7 @@ export class ArtistsService {
 
   public async findOne(id: string): Promise<Artist> {
     if (uuidValidate(id)) {
-      const artist: Artist = await this.artists.find(
-        (artist) => artist.id === id,
-      );
+      const artist: Artist = this.artists.find((artist) => artist.id === id);
       if (artist) return artist;
       else throw new NotFoundException();
     } else throw new BadRequestException();
@@ -72,10 +70,8 @@ export class ArtistsService {
         this.tracksService.removeArtist(id);
         try {
           this.favoritesService.removeArtist(id);
-          return 'The artist has been deleted';
-        } catch (err) {
-          return 'The artist has been deleted';
-        }
+        } catch (err) {}
+        return 'The artist has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }
