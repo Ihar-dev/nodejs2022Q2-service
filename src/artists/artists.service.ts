@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,6 +12,7 @@ import { CreateUpdateArtistDto } from './dto/create-update-artist.dto';
 import { Artist } from './entities/artist.entity';
 import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class ArtistsService {
@@ -17,7 +20,10 @@ export class ArtistsService {
 
   constructor(
     private readonly albumsService: AlbumsService,
+    @Inject(forwardRef(() => TracksService))
     private readonly tracksService: TracksService,
+    @Inject(forwardRef(() => FavoritesService))
+    private readonly favoritesService: FavoritesService,
   ) {}
 
   public async create(
@@ -64,7 +70,12 @@ export class ArtistsService {
         this.artists.splice(index, 1);
         this.albumsService.removeArtist(id);
         this.tracksService.removeArtist(id);
-        return 'The artist has been deleted';
+        try {
+          this.favoritesService.removeArtist(id);
+          return 'The artist has been deleted';
+        } catch (err) {
+          return 'The artist has been deleted';
+        }
       } else throw new NotFoundException();
     } else throw new BadRequestException();
   }
