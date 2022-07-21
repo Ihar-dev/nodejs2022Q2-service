@@ -1,10 +1,9 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as build
 ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install
+WORKDIR /app
 COPY . .
+RUN npm install --production --silent
+FROM gcr.io/distroless/nodejs
+COPY --from=build /app /
 EXPOSE $PORT
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+CMD ["dist/main.js"]
