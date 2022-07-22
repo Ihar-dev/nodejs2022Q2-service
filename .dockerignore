@@ -1,7 +1,6 @@
 /.git
 /.vscode
 /node_module
-/src
 /test
 /.dockerignore
 /.env.example
@@ -12,5 +11,3 @@
 /Dockerfile*
 /npm-debug.log
 README.md
-tsconfig.json
-tsconfig.build.json

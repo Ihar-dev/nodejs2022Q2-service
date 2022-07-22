@@ -1,12 +1,52 @@
 version: '3.4'
 
+volumes:
+  postgres-volume:
+  
+networks:
+  app-network:
+    name: rest-service-network
+    driver: bridge
+
+
 services:
-  homelibrary:
-    image: homelibrary
+  api:
+    container_name: rest-service-container
+    image: rest-service-image
     build:
+      dockerfile: Dockerfile
       context: .
-      dockerfile: ./Dockerfile
+      target: development
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
     environment:
-      NODE_ENV: production
+      POSTGRES_USER: POSTGRES_USER
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      POSTGRES_DB: POSTGRES_DB
+    command: npm run start:dev
     ports:
-      - 4000:4000
+      - ${PORT}:${PORT}
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+  
+  postgres:
+    container_name: postgres-container
+    image: postgres-image
+    build: 
+      dockerfile: ./postgress/Dockerfile
+      context: .
+    restart: always
+    ports: 
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: POSTGRES_USER
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      POSTGRES_DB: POSTGRES_DB
+    networks:
+      - app-network
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
