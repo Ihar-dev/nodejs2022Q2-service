@@ -105,6 +105,8 @@ in an additional terminal after the application starting
 
 $ cd nodejs2022Q2-service
 
+$ npm run test
+
 ##  Scanning the image for vulnerabilities:
 
 in an additional terminal after the application starting
