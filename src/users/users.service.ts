@@ -41,7 +41,12 @@ export class UsersService {
 
   public async findOne(userId: string): Promise<User> {
     if (uuidValidate(userId)) {
-      const user: User = this.users.find((user) => user.id === userId);
+      const user: User = await this.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
       if (user) return this.getUserWithoutPassword(user);
       else throw new NotFoundException();
     } else throw new BadRequestException();
@@ -77,10 +82,17 @@ export class UsersService {
 
   public async remove(userId: string): Promise<string> {
     if (uuidValidate(userId)) {
-      const user: User = this.users.find((user) => user.id === userId);
+      const user: User = await this.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
       if (user) {
-        const index = this.users.indexOf(user);
-        this.users.splice(index, 1);
+        await this.prisma.user.delete({
+          where: { id: userId },
+        });
+
         return 'The user has been deleted';
       } else throw new NotFoundException();
     } else throw new BadRequestException();
