@@ -19,7 +19,8 @@ export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   public async findAll(): Promise<User[]> {
-    return this.users;
+    const users: User[] = await this.prisma.user.findMany();
+    return users;
   }
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
@@ -51,13 +52,24 @@ export class UsersService {
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
     if (uuidValidate(userId)) {
-      const user: User = this.users.find((user) => user.id === userId);
+      const user: User = await this.prisma.user.findUnique({
+        where: {
+          id: userId,
+        },
+      });
+
       if (user) {
         if (updatePasswordDto.oldPassword === user.password) {
           user.password = updatePasswordDto.newPassword;
           user.version++;
           user.updatedAt = Date.now();
-          return this.getUserWithoutPassword(user);
+
+          const newUser = await this.prisma.user.update({
+            where: { id: userId },
+            data: { ...user },
+          });
+
+          return this.getUserWithoutPassword(newUser);
         } else throw new ForbiddenException();
       } else throw new NotFoundException();
     } else throw new BadRequestException();
