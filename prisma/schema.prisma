@@ -42,7 +42,7 @@ model Track {
 
 model Favorites {
   id     String  @id @default(uuid())
-  artists String
-  albums String
-  tracks String
+  artists String[]
+  albums String[]
+  tracks String[]
 }
