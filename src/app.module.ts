@@ -7,6 +7,13 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
-  imports: [UsersModule, TracksModule, ArtistsModule, AlbumsModule, FavoritesModule, PrismaModule],
+  imports: [
+    UsersModule,
+    TracksModule,
+    ArtistsModule,
+    AlbumsModule,
+    FavoritesModule,
+    PrismaModule,
+  ],
 })
 export class AppModule {}
