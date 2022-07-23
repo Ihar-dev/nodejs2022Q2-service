@@ -10,10 +10,13 @@ import {
 
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   private readonly users: User[] = [];
+
+  constructor(private readonly prisma: PrismaService) {}
 
   public async findAll(): Promise<User[]> {
     return this.users;
@@ -21,16 +24,17 @@ export class UsersService {
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
     const id = uuidv4();
-    //const hash = await argon.hash(createUserDto.password);
-    const newUser: User = {
-      id,
-      login: createUserDto.login,
-      password: createUserDto.password,
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    this.users.push(newUser);
+    const newUser: User = await this.prisma.user.create({
+      data: {
+        id,
+        login: createUserDto.login,
+        password: createUserDto.password,
+        version: 1,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      },
+    });
+
     return this.getUserWithoutPassword(newUser);
   }
 

@@ -12,6 +12,7 @@ import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AlbumsService {
@@ -22,6 +23,7 @@ export class AlbumsService {
     private readonly tracksService: TracksService,
     @Inject(forwardRef(() => FavoritesService))
     private readonly favoritesService: FavoritesService,
+    private readonly prisma: PrismaService,
   ) {}
 
   public async create(

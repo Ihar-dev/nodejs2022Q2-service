@@ -13,6 +13,7 @@ import { Artist } from './entities/artist.entity';
 import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArtistsService {
@@ -24,6 +25,7 @@ export class ArtistsService {
     private readonly tracksService: TracksService,
     @Inject(forwardRef(() => FavoritesService))
     private readonly favoritesService: FavoritesService,
+    private readonly prisma: PrismaService,
   ) {}
 
   public async create(

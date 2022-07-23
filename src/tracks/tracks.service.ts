@@ -11,6 +11,7 @@ import {
 import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 import { FavoritesService } from '../favorites/favorites.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class TracksService {
@@ -19,6 +20,7 @@ export class TracksService {
   constructor(
     @Inject(forwardRef(() => FavoritesService))
     private readonly favoritesService: FavoritesService,
+    private readonly prisma: PrismaService,
   ) {}
 
   public async create(

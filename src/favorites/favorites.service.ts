@@ -13,6 +13,7 @@ import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
 import { FavoritesResponse } from './entities/favorite-response.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 const NO_EXISTING_CODE = 422;
 
@@ -31,6 +32,7 @@ export class FavoritesService {
     private readonly tracksService: TracksService,
     @Inject(forwardRef(() => ArtistsService))
     private readonly artistsService: ArtistsService,
+    private readonly prisma: PrismaService,
   ) {}
 
   public async addTrack(id: string): Promise<string> {
