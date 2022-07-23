@@ -2,7 +2,7 @@ version: '3.4'
 
 volumes:
   postgres-volume:
-  
+
 networks:
   app-network:
     name: rest-service-network
@@ -41,7 +41,7 @@ services:
       context: .
     restart: always
     ports: 
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - 5434:${POSTGRES_PORT}
     environment:
       POSTGRES_USER: POSTGRES_USER
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
