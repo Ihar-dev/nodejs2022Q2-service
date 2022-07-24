@@ -14,13 +14,13 @@ model User {
   id        String  @id @default(uuid())
   login     String
   password  String?
-  version   Int
+  version   Int     @default(1)
   createdAt Int
   updatedAt Int
 }
 
 model Album {
-  id       String @id @default(uuid())
+  id       String  @id @default(uuid())
   name     String
   year     Int
   artistId String?
@@ -33,16 +33,16 @@ model Artist {
 }
 
 model Track {
-  id     String  @id @default(uuid())
-  name   String
+  id       String  @id @default(uuid())
+  name     String
   artistId String?
-  albumId String?
+  albumId  String?
   duration Int
 }
 
 model Favorites {
-  id     String  @id @default(uuid())
+  id      String   @id @default(uuid())
   artists String[]
-  albums String[]
-  tracks String[]
+  albums  String[]
+  tracks  String[]
 }

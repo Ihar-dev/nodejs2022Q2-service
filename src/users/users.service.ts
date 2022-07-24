@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
 import {
   BadRequestException,
@@ -6,7 +5,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-//import * as argon from 'argon2';
 
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
@@ -22,15 +20,11 @@ export class UsersService {
   }
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
-    const id = uuidv4();
     const newUser: User = await this.prisma.user.create({
       data: {
-        id,
-        login: createUserDto.login,
-        password: createUserDto.password,
-        version: 1,
         createdAt: Date.now(),
         updatedAt: Date.now(),
+        ...createUserDto,
       },
     });
 
