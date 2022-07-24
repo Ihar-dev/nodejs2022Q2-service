@@ -73,21 +73,19 @@ export class UsersService {
   }
 
   public async remove(userId: string): Promise<string> {
-    if (uuidValidate(userId)) {
-      const user: User = await this.prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
+    const user: User = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (user) {
+      await this.prisma.user.delete({
+        where: { id: userId },
       });
 
-      if (user) {
-        await this.prisma.user.delete({
-          where: { id: userId },
-        });
-
-        return 'The user has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+      return 'The user has been deleted';
+    } else throw new NotFoundException();
   }
 
   private getUserWithoutPassword(user: User): User {

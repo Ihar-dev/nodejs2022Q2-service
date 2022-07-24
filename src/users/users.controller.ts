@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpCode,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -126,7 +127,9 @@ export class UsersController {
     description: 'Bad request. userId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
-  remove(@Param('userId') userId: string): Promise<string> {
+  remove(
+    @Param('userId', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ): Promise<string> {
     return this.usersService.remove(userId);
   }
 }
