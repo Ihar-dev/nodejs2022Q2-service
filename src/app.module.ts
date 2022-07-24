@@ -6,6 +6,12 @@ import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
-  imports: [UsersModule, TracksModule, ArtistsModule, AlbumsModule, FavoritesModule],
+  imports: [
+    UsersModule,
+    TracksModule,
+    ArtistsModule,
+    AlbumsModule,
+    FavoritesModule,
+  ],
 })
 export class AppModule {}
