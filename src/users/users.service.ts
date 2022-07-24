@@ -14,8 +14,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
-
   constructor(private readonly prisma: PrismaService) {}
 
   public async findAll(): Promise<User[]> {
