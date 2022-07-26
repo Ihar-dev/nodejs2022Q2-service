@@ -80,7 +80,9 @@ export class AlbumsController {
     description: 'Bad request. albumId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Album not found.' })
-  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string): Album {
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<Album> {
     return this.albumsService.findOne(id);
   }
 

@@ -89,6 +89,7 @@ export class TracksService {
   public async removeAlbum(id): Promise<void> {
     const tracks = await this.findAll();
     const track = tracks.find((track) => track.albumId === id);
+
     if (track) {
       track.albumId = null;
       await this.update(track.id, track);
