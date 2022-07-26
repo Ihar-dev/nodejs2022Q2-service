@@ -7,6 +7,7 @@ import {
   Delete,
   HttpCode,
   Put,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -62,7 +63,9 @@ export class TracksController {
     description: 'Bad request. trackId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Track not found.' })
-  findOne(@Param('id') id: string): Promise<Track> {
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<Track> {
     return this.tracksService.findOne(id);
   }
 
@@ -101,7 +104,7 @@ export class TracksController {
   })
   @ApiNotFoundResponse({ description: 'Track not found.' })
   update(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
     @Body() createUpdateTrackDto: CreateUpdateTrackDto,
   ): Promise<Track> {
     return this.tracksService.update(id, createUpdateTrackDto);
@@ -120,7 +123,9 @@ export class TracksController {
     description: 'Bad request. trackId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Track not found.' })
-  remove(@Param('id') id: string): Promise<string> {
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<string> {
     return this.tracksService.remove(id);
   }
 }

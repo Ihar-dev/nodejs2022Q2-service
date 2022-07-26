@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class Track {
   @ApiProperty()
-  id: string;
+  id?: string;
 
   @ApiProperty()
   name: string;
