@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Album {
-  id: string;
+  id?: string;
 
   @ApiProperty()
   name: string;

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
 import {
-  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -40,39 +39,33 @@ export class AlbumsService {
   }
 
   public findOne(id: string): Album {
-    if (uuidValidate(id)) {
-      const album: Album = this.albums.find((album) => album.id === id);
-      if (album) return album;
-      else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const album: Album = this.albums.find((album) => album.id === id);
+    if (album) return album;
+    else throw new NotFoundException();
   }
 
   public async update(
     id: string,
     createUpdateAlbumDto: CreateUpdateAlbumDto,
   ): Promise<Album> {
-    if (uuidValidate(id)) {
-      let album: Album = this.albums.find((album) => album.id === id);
-      if (album) {
-        album = { id, ...createUpdateAlbumDto };
-        return album;
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    let album: Album = this.albums.find((album) => album.id === id);
+    if (album) {
+      album = { id, ...createUpdateAlbumDto };
+      return album;
+    } else throw new NotFoundException();
   }
 
   public async remove(id: string): Promise<string> {
-    if (uuidValidate(id)) {
-      const album: Album = this.albums.find((album) => album.id === id);
-      if (album) {
-        const index = this.albums.indexOf(album);
-        this.albums.splice(index, 1);
-        await this.tracksService.removeAlbum(id);
-        try {
-          this.favoritesService.removeAlbum(id);
-        } catch (err) {}
-        return 'The track has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const album: Album = this.albums.find((album) => album.id === id);
+    if (album) {
+      const index = this.albums.indexOf(album);
+      this.albums.splice(index, 1);
+      await this.tracksService.removeAlbum(id);
+      try {
+        this.favoritesService.removeAlbum(id);
+      } catch (err) {}
+      return 'The track has been deleted';
+    } else throw new NotFoundException();
   }
 
   public async removeArtist(id): Promise<void> {
