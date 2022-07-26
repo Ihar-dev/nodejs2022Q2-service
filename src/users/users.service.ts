@@ -7,6 +7,7 @@ import {
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -14,7 +15,7 @@ export class UsersService {
 
   public async findAll(): Promise<User[]> {
     const users: User[] = await this.prisma.user.findMany();
-    return users;
+    return users.map((user) => plainToInstance(User, user));
   }
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
@@ -26,7 +27,7 @@ export class UsersService {
       },
     });
 
-    return this.getUserWithoutPassword(newUser);
+    return plainToInstance(User, newUser);
   }
 
   public async findOne(userId: string): Promise<User> {
@@ -36,7 +37,7 @@ export class UsersService {
       },
     });
 
-    if (user) return this.getUserWithoutPassword(user);
+    if (user) return plainToInstance(User, user);
     else throw new NotFoundException();
   }
 
@@ -58,10 +59,10 @@ export class UsersService {
 
         const newUser = await this.prisma.user.update({
           where: { id: userId },
-          data: { ...user },
+          data: user,
         });
 
-        return this.getUserWithoutPassword(newUser);
+        return plainToInstance(User, newUser);
       } else throw new ForbiddenException();
     } else throw new NotFoundException();
   }
@@ -80,11 +81,5 @@ export class UsersService {
 
       return 'The user has been deleted';
     } else throw new NotFoundException();
-  }
-
-  private getUserWithoutPassword(user: User): User {
-    const newUser = { ...user };
-    delete newUser.password;
-    return newUser;
   }
 }
