@@ -66,7 +66,7 @@ export class AlbumsService {
       if (album) {
         const index = this.albums.indexOf(album);
         this.albums.splice(index, 1);
-        this.tracksService.removeAlbum(id);
+        await this.tracksService.removeAlbum(id);
         try {
           this.favoritesService.removeAlbum(id);
         } catch (err) {}

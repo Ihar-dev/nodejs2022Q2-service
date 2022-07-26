@@ -69,7 +69,7 @@ export class ArtistsService {
         const index = this.artists.indexOf(artist);
         this.artists.splice(index, 1);
         this.albumsService.removeArtist(id);
-        this.tracksService.removeArtist(id);
+        await this.tracksService.removeArtist(id);
         try {
           this.favoritesService.removeArtist(id);
         } catch (err) {}
