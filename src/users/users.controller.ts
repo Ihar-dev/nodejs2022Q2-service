@@ -64,7 +64,9 @@ export class UsersController {
     description: 'Bad request. userId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'User not found.' })
-  findOne(@Param('userId') userId: string): Promise<User> {
+  findOne(
+    @Param('userId', new ParseUUIDPipe({ version: '4' })) userId: string,
+  ): Promise<User> {
     return this.usersService.findOne(userId);
   }
 
@@ -111,7 +113,7 @@ export class UsersController {
   @ApiNotFoundResponse({ description: 'User not found.' })
   @ApiForbiddenResponse({ description: 'oldPassword is wrong.' })
   update(
-    @Param('userId') userId: string,
+    @Param('userId', new ParseUUIDPipe({ version: '4' })) userId: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
     return this.usersService.update(userId, updatePasswordDto);

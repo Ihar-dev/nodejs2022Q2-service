@@ -1,6 +1,4 @@
-import { validate as uuidValidate } from 'uuid';
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -32,44 +30,40 @@ export class UsersService {
   }
 
   public async findOne(userId: string): Promise<User> {
-    if (uuidValidate(userId)) {
-      const user: User = await this.prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
+    const user: User = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-      if (user) return this.getUserWithoutPassword(user);
-      else throw new NotFoundException();
-    } else throw new BadRequestException();
+    if (user) return this.getUserWithoutPassword(user);
+    else throw new NotFoundException();
   }
 
   public async update(
     userId: string,
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
-    if (uuidValidate(userId)) {
-      const user: User = await this.prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
+    const user: User = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
 
-      if (user) {
-        if (updatePasswordDto.oldPassword === user.password) {
-          user.password = updatePasswordDto.newPassword;
-          user.version++;
-          user.updatedAt = Date.now();
+    if (user) {
+      if (updatePasswordDto.oldPassword === user.password) {
+        user.password = updatePasswordDto.newPassword;
+        user.version++;
+        user.updatedAt = Date.now();
 
-          const newUser = await this.prisma.user.update({
-            where: { id: userId },
-            data: { ...user },
-          });
+        const newUser = await this.prisma.user.update({
+          where: { id: userId },
+          data: { ...user },
+        });
 
-          return this.getUserWithoutPassword(newUser);
-        } else throw new ForbiddenException();
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+        return this.getUserWithoutPassword(newUser);
+      } else throw new ForbiddenException();
+    } else throw new NotFoundException();
   }
 
   public async remove(userId: string): Promise<string> {
