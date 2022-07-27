@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import {
   forwardRef,
   Inject,
@@ -15,8 +14,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ArtistsService {
-  private readonly artists: Artist[] = [];
-
   constructor(
     private readonly albumsService: AlbumsService,
     @Inject(forwardRef(() => TracksService))
@@ -29,18 +26,20 @@ export class ArtistsService {
   public async create(
     createUpdateArtistDto: CreateUpdateArtistDto,
   ): Promise<Artist> {
-    const id = uuidv4();
-    const newArtist: Artist = { id, ...createUpdateArtistDto };
-    await this.artists.push(newArtist);
+    const newArtist: Artist = await this.prisma.artist.create({
+      data: createUpdateArtistDto,
+    });
     return newArtist;
   }
 
   public async findAll(): Promise<Artist[]> {
-    return this.artists;
+    return this.prisma.artist.findMany();
   }
 
   public async findOne(id: string): Promise<Artist> {
-    const artist: Artist = this.artists.find((artist) => artist.id === id);
+    const artist: Artist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
     if (artist) return artist;
     else throw new NotFoundException();
   }
@@ -49,18 +48,29 @@ export class ArtistsService {
     id: string,
     createUpdateArtistDto: CreateUpdateArtistDto,
   ): Promise<Artist> {
-    let artist: Artist = this.artists.find((artist) => artist.id === id);
+    const artist: Artist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
+
     if (artist) {
-      artist = { id, ...createUpdateArtistDto };
-      return artist;
+      const newArtist: Artist = await this.prisma.artist.update({
+        where: { id },
+        data: createUpdateArtistDto,
+      });
+      return newArtist;
     } else throw new NotFoundException();
   }
 
   public async remove(id: string): Promise<string> {
-    const artist: Artist = this.artists.find((artist) => artist.id === id);
+    const artist: Artist = await this.prisma.artist.findUnique({
+      where: { id },
+    });
+
     if (artist) {
-      const index = this.artists.indexOf(artist);
-      this.artists.splice(index, 1);
+      await this.prisma.artist.delete({
+        where: { id },
+      });
+
       this.albumsService.removeArtist(id);
       await this.tracksService.removeArtist(id);
       try {

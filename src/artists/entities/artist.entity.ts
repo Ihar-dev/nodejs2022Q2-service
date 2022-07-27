@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class Artist {
   @ApiProperty()
-  id: string;
+  id?: string;
 
   @ApiProperty()
   name: string;

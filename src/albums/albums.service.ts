@@ -36,9 +36,7 @@ export class AlbumsService {
 
   public async findOne(id: string): Promise<Album> {
     const album: Album = await this.prisma.album.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (album) return album;
@@ -50,9 +48,7 @@ export class AlbumsService {
     createUpdateAlbumDto: CreateUpdateAlbumDto,
   ): Promise<Album> {
     const album: Album = await this.prisma.album.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
     });
 
     if (album) {
