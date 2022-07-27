@@ -1,1 +1,3 @@
-FROM postgres:14.1-alpine
+FROM postgres:alpine
+
+EXPOSE ${POSTGRES_PORT}
