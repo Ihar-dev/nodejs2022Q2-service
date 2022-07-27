@@ -1,7 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { validate as uuidValidate } from 'uuid';
 import {
-  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -42,39 +40,33 @@ export class ArtistsService {
   }
 
   public async findOne(id: string): Promise<Artist> {
-    if (uuidValidate(id)) {
-      const artist: Artist = this.artists.find((artist) => artist.id === id);
-      if (artist) return artist;
-      else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const artist: Artist = this.artists.find((artist) => artist.id === id);
+    if (artist) return artist;
+    else throw new NotFoundException();
   }
 
   public async update(
     id: string,
     createUpdateArtistDto: CreateUpdateArtistDto,
   ): Promise<Artist> {
-    if (uuidValidate(id)) {
-      let artist: Artist = this.artists.find((artist) => artist.id === id);
-      if (artist) {
-        artist = { id, ...createUpdateArtistDto };
-        return artist;
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    let artist: Artist = this.artists.find((artist) => artist.id === id);
+    if (artist) {
+      artist = { id, ...createUpdateArtistDto };
+      return artist;
+    } else throw new NotFoundException();
   }
 
   public async remove(id: string): Promise<string> {
-    if (uuidValidate(id)) {
-      const artist: Artist = this.artists.find((artist) => artist.id === id);
-      if (artist) {
-        const index = this.artists.indexOf(artist);
-        this.artists.splice(index, 1);
-        this.albumsService.removeArtist(id);
-        await this.tracksService.removeArtist(id);
-        try {
-          this.favoritesService.removeArtist(id);
-        } catch (err) {}
-        return 'The artist has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const artist: Artist = this.artists.find((artist) => artist.id === id);
+    if (artist) {
+      const index = this.artists.indexOf(artist);
+      this.artists.splice(index, 1);
+      this.albumsService.removeArtist(id);
+      await this.tracksService.removeArtist(id);
+      try {
+        this.favoritesService.removeArtist(id);
+      } catch (err) {}
+      return 'The artist has been deleted';
+    } else throw new NotFoundException();
   }
 }
