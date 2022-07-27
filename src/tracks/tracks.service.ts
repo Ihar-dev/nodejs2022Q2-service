@@ -71,7 +71,7 @@ export class TracksService {
         where: { id },
       });
       try {
-        this.favoritesService.removeTrack(id);
+        await this.favoritesService.removeTrack(id);
       } catch (err) {}
       return 'The track has been deleted';
     } else throw new NotFoundException();

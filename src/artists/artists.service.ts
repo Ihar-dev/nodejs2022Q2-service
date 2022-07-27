@@ -71,10 +71,10 @@ export class ArtistsService {
         where: { id },
       });
 
-      this.albumsService.removeArtist(id);
+      await this.albumsService.removeArtist(id);
       await this.tracksService.removeArtist(id);
       try {
-        this.favoritesService.removeArtist(id);
+        await this.favoritesService.removeArtist(id);
       } catch (err) {}
       return 'The artist has been deleted';
     } else throw new NotFoundException();

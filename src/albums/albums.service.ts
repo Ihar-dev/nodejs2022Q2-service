@@ -71,7 +71,7 @@ export class AlbumsService {
 
       try {
         await this.tracksService.removeAlbum(id);
-        this.favoritesService.removeAlbum(id);
+        await this.favoritesService.removeAlbum(id);
       } catch (err) {}
       return 'The album has been deleted';
     } else throw new NotFoundException();

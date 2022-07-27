@@ -107,11 +107,11 @@ export class FavoritesService {
     return favorites;
   }
 
-  public removeTrack(id: string): Promise<string> {
+  public async removeTrack(id: string): Promise<string> {
     return this.removeFromFavorites('tracks', id);
   }
 
-  public removeAlbum(id: string): Promise<string> {
+  public async removeAlbum(id: string): Promise<string> {
     return this.removeFromFavorites('albums', id);
   }
 
@@ -138,7 +138,7 @@ export class FavoritesService {
           if (artistId) {
             const index = favorites.artists.indexOf(artistId);
             favorites.artists.splice(index, 1);
-          } // else throw new NotFoundException();
+          } else throw new NotFoundException();
           break;
         case 'albums':
           const albumId: string = favorites.albums.find(
@@ -148,7 +148,7 @@ export class FavoritesService {
           if (albumId) {
             const index = favorites.albums.indexOf(albumId);
             favorites.albums.splice(index, 1);
-          } // else throw new NotFoundException();
+          } else throw new NotFoundException();
           break;
         case 'tracks':
           const trackId: string = favorites.tracks.find(
@@ -158,7 +158,7 @@ export class FavoritesService {
           if (trackId) {
             const index = favorites.tracks.indexOf(trackId);
             favorites.tracks.splice(index, 1);
-          } // else throw new NotFoundException();
+          } else throw new NotFoundException();
           break;
       }
 
@@ -171,10 +171,7 @@ export class FavoritesService {
     } else throw new NotFoundException();
   }
 
-  private async updateFavorites(
-    target: string,
-    id: string,
-  ): Promise<Favorites> {
+  private async updateFavorites(target: string, id: string): Promise<void> {
     const favoritesArray = await this.prisma.favorites.findMany();
 
     if (favoritesArray.length) {
@@ -193,7 +190,7 @@ export class FavoritesService {
           break;
       }
 
-      return this.prisma.favorites.update({
+      await this.prisma.favorites.update({
         where: { id: favId },
         data: favorites,
       });
@@ -216,7 +213,7 @@ export class FavoritesService {
           break;
       }
 
-      return this.prisma.favorites.create({ data });
+      await this.prisma.favorites.create({ data });
     }
   }
 }
