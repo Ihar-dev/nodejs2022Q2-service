@@ -1,3 +1,3 @@
 FROM postgres:alpine
 
-EXPOSE ${POSTGRES_PORT}
+EXPOSE 5432
