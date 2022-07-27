@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile
       context: .
       target: development
-    restart: always
+    restart: unless-stopped
     volumes:
       - .:/app
       - /app/node_modules
@@ -39,7 +39,7 @@ services:
     build: 
       dockerfile: ./postgress/Dockerfile
       context: .
-    restart: always
+    restart: unless-stopped
     ports: 
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     environment:
