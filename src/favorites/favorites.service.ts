@@ -1,12 +1,10 @@
 import {
-  BadRequestException,
   forwardRef,
   HttpException,
   Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { validate as uuidValidate } from 'uuid';
 
 import { Favorites } from './entities/favorite.entity';
 import { TracksService } from '../tracks/tracks.service';
@@ -36,57 +34,51 @@ export class FavoritesService {
   ) {}
 
   public async addTrack(id: string): Promise<string> {
-    if (uuidValidate(id)) {
-      try {
-        await this.tracksService.findOne(id);
-        await this.favorites.tracks.push(id);
-        return 'Added successfully';
-      } catch (err) {
-        throw new HttpException(
-          {
-            status: NO_EXISTING_CODE,
-            error: "Track with id doesn't exist.",
-          },
-          NO_EXISTING_CODE,
-        );
-      }
-    } else throw new BadRequestException();
+    try {
+      await this.tracksService.findOne(id);
+      await this.favorites.tracks.push(id);
+      return 'Added successfully';
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: NO_EXISTING_CODE,
+          error: "Track with id doesn't exist.",
+        },
+        NO_EXISTING_CODE,
+      );
+    }
   }
 
   public async addAlbum(id: string): Promise<string> {
-    if (uuidValidate(id)) {
-      try {
-        await this.albumsService.findOne(id);
-        await this.favorites.albums.push(id);
-        return 'Added successfully';
-      } catch (err) {
-        throw new HttpException(
-          {
-            status: NO_EXISTING_CODE,
-            error: "Album with id doesn't exist.",
-          },
-          NO_EXISTING_CODE,
-        );
-      }
-    } else throw new BadRequestException();
+    try {
+      await this.albumsService.findOne(id);
+      await this.favorites.albums.push(id);
+      return 'Added successfully';
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: NO_EXISTING_CODE,
+          error: "Album with id doesn't exist.",
+        },
+        NO_EXISTING_CODE,
+      );
+    }
   }
 
   public async addArtist(id: string): Promise<string> {
-    if (uuidValidate(id)) {
-      try {
-        await this.artistsService.findOne(id);
-        await this.favorites.artists.push(id);
-        return 'Added successfully';
-      } catch (err) {
-        throw new HttpException(
-          {
-            status: NO_EXISTING_CODE,
-            error: "Artist with id doesn't exist.",
-          },
-          NO_EXISTING_CODE,
-        );
-      }
-    } else throw new BadRequestException();
+    try {
+      await this.artistsService.findOne(id);
+      await this.favorites.artists.push(id);
+      return 'Added successfully';
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: NO_EXISTING_CODE,
+          error: "Artist with id doesn't exist.",
+        },
+        NO_EXISTING_CODE,
+      );
+    }
   }
 
   public async findAll(): Promise<FavoritesResponse> {
@@ -110,41 +102,35 @@ export class FavoritesService {
   }
 
   public removeTrack(id: string): string {
-    if (uuidValidate(id)) {
-      const trackId: string = this.favorites.tracks.find(
-        (trackId) => trackId === id,
-      );
-      if (trackId) {
-        const index = this.favorites.tracks.indexOf(trackId);
-        this.favorites.tracks.splice(index, 1);
-        return 'The track has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const trackId: string = this.favorites.tracks.find(
+      (trackId) => trackId === id,
+    );
+    if (trackId) {
+      const index = this.favorites.tracks.indexOf(trackId);
+      this.favorites.tracks.splice(index, 1);
+      return 'The track has been deleted';
+    } else throw new NotFoundException();
   }
 
   public removeAlbum(id: string): string {
-    if (uuidValidate(id)) {
-      const albumId: string = this.favorites.albums.find(
-        (albumId) => albumId === id,
-      );
-      if (albumId) {
-        const index = this.favorites.albums.indexOf(albumId);
-        this.favorites.albums.splice(index, 1);
-        return 'The track has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const albumId: string = this.favorites.albums.find(
+      (albumId) => albumId === id,
+    );
+    if (albumId) {
+      const index = this.favorites.albums.indexOf(albumId);
+      this.favorites.albums.splice(index, 1);
+      return 'The track has been deleted';
+    } else throw new NotFoundException();
   }
 
   public removeArtist(id: string): string {
-    if (uuidValidate(id)) {
-      const artistId: string = this.favorites.artists.find(
-        (artistId) => artistId === id,
-      );
-      if (artistId) {
-        const index = this.favorites.artists.indexOf(artistId);
-        this.favorites.artists.splice(index, 1);
-        return 'The track has been deleted';
-      } else throw new NotFoundException();
-    } else throw new BadRequestException();
+    const artistId: string = this.favorites.artists.find(
+      (artistId) => artistId === id,
+    );
+    if (artistId) {
+      const index = this.favorites.artists.indexOf(artistId);
+      this.favorites.artists.splice(index, 1);
+      return 'The track has been deleted';
+    } else throw new NotFoundException();
   }
 }

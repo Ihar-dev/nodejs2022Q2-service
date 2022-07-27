@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Param, Delete, HttpCode } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Delete,
+  HttpCode,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -33,7 +41,9 @@ export class FavoritesController {
     status: 422,
     description: "Track with id doesn't exist.",
   })
-  addTrack(@Param('id') id: string): Promise<string> {
+  addTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<string> {
     return this.favoritesService.addTrack(id);
   }
 
@@ -52,7 +62,9 @@ export class FavoritesController {
     status: 422,
     description: "Album with id doesn't exist.",
   })
-  addAlbum(@Param('id') id: string): Promise<string> {
+  addAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<string> {
     return this.favoritesService.addAlbum(id);
   }
 
@@ -71,7 +83,9 @@ export class FavoritesController {
     status: 422,
     description: "Artist with id doesn't exist.",
   })
-  addArtist(@Param('id') id: string): Promise<string> {
+  addArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): Promise<string> {
     return this.favoritesService.addArtist(id);
   }
 
@@ -128,7 +142,9 @@ export class FavoritesController {
     description: 'Bad request. trackId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Track not found.' })
-  removeTrack(@Param('id') id: string): string {
+  removeTrack(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): string {
     return this.favoritesService.removeTrack(id);
   }
 
@@ -145,7 +161,9 @@ export class FavoritesController {
     description: 'Bad request. albumId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Album not found.' })
-  removeAlbum(@Param('id') id: string): string {
+  removeAlbum(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): string {
     return this.favoritesService.removeAlbum(id);
   }
 
@@ -162,7 +180,9 @@ export class FavoritesController {
     description: 'Bad request. artistId is invalid (not uuid).',
   })
   @ApiNotFoundResponse({ description: 'Artist not found.' })
-  removeArtist(@Param('id') id: string): string {
+  removeArtist(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ): string {
     return this.favoritesService.removeArtist(id);
   }
 }
