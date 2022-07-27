@@ -144,7 +144,7 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Track not found.' })
   removeTrack(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): string {
+  ): Promise<string> {
     return this.favoritesService.removeTrack(id);
   }
 
@@ -163,7 +163,7 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Album not found.' })
   removeAlbum(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): string {
+  ): Promise<string> {
     return this.favoritesService.removeAlbum(id);
   }
 
@@ -182,7 +182,7 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Artist not found.' })
   removeArtist(
     @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
-  ): string {
+  ): Promise<string> {
     return this.favoritesService.removeArtist(id);
   }
 }

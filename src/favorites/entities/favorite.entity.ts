@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class Favorites {
+  id?: string;
+
   @ApiProperty()
   artists: string[];
 
