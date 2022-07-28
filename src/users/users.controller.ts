@@ -23,14 +23,7 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
-
-const USER_EXAMPLE = {
-  id: 'de7018b5-a4d6-4bf8-9651-6a4574f373da',
-  login: 'TEST_LOGIN',
-  version: 1,
-  createAt: 1657746431528,
-  updateAt: 1657746431528,
-};
+import { UpdatedUser } from './entities/updated-user.entity';
 
 @ApiTags('Users')
 @Controller('user')
@@ -41,9 +34,7 @@ export class UsersController {
   @ApiOperation({ summary: 'get all users', description: 'Gets all users.' })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: [USER_EXAMPLE],
-    },
+    type: [User],
   })
   findAll(): Promise<User[]> {
     return this.usersService.findAll();
@@ -56,9 +47,7 @@ export class UsersController {
   })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: USER_EXAMPLE,
-    },
+    type: User,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. userId is invalid (not uuid).',
@@ -74,9 +63,7 @@ export class UsersController {
   @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
   @ApiCreatedResponse({
     description: 'The user has been created.',
-    schema: {
-      example: USER_EXAMPLE,
-    },
+    type: User,
   })
   @ApiBadRequestResponse({
     description:
@@ -97,15 +84,7 @@ export class UsersController {
   })
   @ApiOkResponse({
     description: 'The user has been updated.',
-    schema: {
-      example: {
-        id: 'de7018b5-a4d6-4bf8-9651-6a4574f373da',
-        login: 'TEST_LOGIN',
-        version: 2,
-        createAt: 1657746431528,
-        updateAt: 1657834424839,
-      },
-    },
+    type: UpdatedUser,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. userId is invalid (not uuid).',

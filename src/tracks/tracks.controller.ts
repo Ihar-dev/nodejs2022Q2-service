@@ -23,14 +23,6 @@ import { TracksService } from './tracks.service';
 import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 
-const TRACK_EXAMPLE = {
-  id: '566f9040-37b9-4170-849b-d867a3f009f4',
-  name: 'The Show Must Go On',
-  artistId: '92e0a93a-59ce-4220-8ef6-def797c2440e',
-  albumId: '441f4f18-d265-4af2-8d54-2cb5d1e15b9b',
-  duration: 123,
-};
-
 @ApiTags('Tracks')
 @Controller('track')
 export class TracksController {
@@ -40,9 +32,7 @@ export class TracksController {
   @ApiOperation({ summary: 'get all tracks', description: 'Gets all tracks.' })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: [TRACK_EXAMPLE],
-    },
+    type: [Track],
   })
   findAll(): Promise<Track[]> {
     return this.tracksService.findAll();
@@ -55,9 +45,7 @@ export class TracksController {
   })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: TRACK_EXAMPLE,
-    },
+    type: Track,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. trackId is invalid (not uuid).',
@@ -76,9 +64,7 @@ export class TracksController {
   })
   @ApiCreatedResponse({
     description: 'The track has been created.',
-    schema: {
-      example: TRACK_EXAMPLE,
-    },
+    type: Track,
   })
   @ApiBadRequestResponse({
     description:
@@ -95,9 +81,7 @@ export class TracksController {
   })
   @ApiOkResponse({
     description: 'The track has been updated.',
-    schema: {
-      example: TRACK_EXAMPLE,
-    },
+    type: Track,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. trackId is invalid (not uuid).',

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateUpdateAlbumDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Innuendo' })
   @IsNotEmpty()
   @IsString()
   name: string;

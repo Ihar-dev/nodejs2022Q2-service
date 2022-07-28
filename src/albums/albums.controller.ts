@@ -23,12 +23,6 @@ import { AlbumsService } from './albums.service';
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
 
-const ALBUM_EXAMPLE = {
-  name: 'string',
-  year: 2015,
-  artistId: 'c47daf6f-59ba-4a06-a578-2334fa1502dd',
-};
-
 @ApiTags('Albums')
 @Controller('album')
 export class AlbumsController {
@@ -41,9 +35,7 @@ export class AlbumsController {
   })
   @ApiCreatedResponse({
     description: 'The album has been created.',
-    schema: {
-      example: ALBUM_EXAMPLE,
-    },
+    type: Album,
   })
   @ApiBadRequestResponse({
     description:
@@ -57,9 +49,7 @@ export class AlbumsController {
   @ApiOperation({ summary: 'get all albums', description: 'Gets all albums.' })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: [ALBUM_EXAMPLE],
-    },
+    type: [Album],
   })
   findAll(): Promise<Album[]> {
     return this.albumsService.findAll();
@@ -72,9 +62,7 @@ export class AlbumsController {
   })
   @ApiOkResponse({
     description: 'Successful operation.',
-    schema: {
-      example: ALBUM_EXAMPLE,
-    },
+    type: Album,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. albumId is invalid (not uuid).',
@@ -93,9 +81,7 @@ export class AlbumsController {
   })
   @ApiOkResponse({
     description: 'The album has been updated.',
-    schema: {
-      example: ALBUM_EXAMPLE,
-    },
+    type: Album,
   })
   @ApiBadRequestResponse({
     description: 'Bad request. albumId is invalid (not uuid).',

@@ -6,7 +6,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { Favorites } from './entities/favorite.entity';
 import { TracksService } from '../tracks/tracks.service';
 import { AlbumsService } from '../albums/albums.service';
 import { ArtistsService } from '../artists/artists.service';
