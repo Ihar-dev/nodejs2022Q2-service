@@ -1,6 +1,6 @@
 /.git
 /.vscode
-/node_module
+/node_modules
 /test
 /.dockerignore
 /.env.example
