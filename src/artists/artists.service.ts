@@ -71,7 +71,6 @@ export class ArtistsService {
         where: { id },
       });
 
-      //await this.tracksService.removeArtist(id);
       try {
         await this.favoritesService.removeArtist(id);
       } catch (err) {}

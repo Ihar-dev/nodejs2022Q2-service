@@ -70,7 +70,6 @@ export class AlbumsService {
       });
 
       try {
-        await this.tracksService.removeAlbum(id);
         await this.favoritesService.removeAlbum(id);
       } catch (err) {}
       return 'The album has been deleted';
