@@ -32,12 +32,14 @@ model Artist {
   id     String  @id @default(uuid())
   name   String
   grammy Boolean
-  Album  Album[]
+  Albums Album[]
+  Tracks Track[]
 }
 
 model Track {
   id       String  @id @default(uuid())
   name     String
+  artist   Artist? @relation(fields: [artistId], references: [id], onDelete: SetNull)
   artistId String?
   albumId  String?
   duration Int
