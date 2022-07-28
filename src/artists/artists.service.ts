@@ -71,7 +71,7 @@ export class ArtistsService {
         where: { id },
       });
 
-      await this.albumsService.removeArtist(id);
+      // await this.albumsService.removeArtist(id);
       await this.tracksService.removeArtist(id);
       try {
         await this.favoritesService.removeArtist(id);
