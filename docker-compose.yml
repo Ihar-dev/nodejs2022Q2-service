@@ -13,8 +13,8 @@ networks:
 services:
 
   api:
-    container_name: rest-service-container
-    image: rest-service-image
+    container_name: rest-service-container-prisma
+    image: rest-service-image-prisma
     build:
       dockerfile: Dockerfile
       context: .
@@ -39,8 +39,8 @@ services:
       - postgres
   
   postgres:
-    container_name: postgres-container
-    image: postgres-image
+    container_name: postgres-container-prisma
+    image: postgres-image-prisma
     build: 
       dockerfile: ./postgress/Dockerfile
       context: .
