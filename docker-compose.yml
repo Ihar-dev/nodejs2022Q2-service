@@ -3,14 +3,14 @@ version: '3.4'
 volumes:
   node:
   postgres-volume:
-
+  
 networks:
   app-network:
     name: rest-service-network
     driver: bridge
 
-services:
 
+services:
   api:
     container_name: rest-service-container
     image: rest-service-image
@@ -22,8 +22,6 @@ services:
     volumes:
       - .:/app
       - node:/app/node_modules
-    env_file:
-      - .env
     environment:
       POSTGRES_USER: POSTGRES_USER
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
@@ -36,7 +34,7 @@ services:
       - app-network
     depends_on:
       - postgres
-
+  
   postgres:
     container_name: postgres-container
     image: postgres-image
