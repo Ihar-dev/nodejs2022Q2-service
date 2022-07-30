@@ -11,6 +11,7 @@ import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class ArtistsService {
@@ -29,18 +30,19 @@ export class ArtistsService {
     const newArtist: Artist = await this.prisma.artist.create({
       data: createUpdateArtistDto,
     });
-    return newArtist;
+    return plainToInstance(Artist, newArtist);
   }
 
   public async findAll(): Promise<Artist[]> {
-    return this.prisma.artist.findMany();
+    const artists = await this.prisma.artist.findMany();
+    return artists.map((artist) => plainToInstance(Artist, artist));
   }
 
   public async findOne(id: string): Promise<Artist> {
     const artist: Artist = await this.prisma.artist.findUnique({
       where: { id },
     });
-    if (artist) return artist;
+    if (artist) return plainToInstance(Artist, artist);
     else throw new NotFoundException();
   }
 
@@ -57,7 +59,7 @@ export class ArtistsService {
         where: { id },
         data: createUpdateArtistDto,
       });
-      return newArtist;
+      return plainToInstance(Artist, newArtist);
     } else throw new NotFoundException();
   }
 
@@ -72,7 +74,7 @@ export class ArtistsService {
       });
 
       try {
-        await this.favoritesService.removeArtist(id);
+        // await this.favoritesService.removeArtist(id);
       } catch (err) {}
       return 'The artist has been deleted';
     } else throw new NotFoundException();

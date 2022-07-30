@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class Artist {
   @ApiProperty({
@@ -12,4 +13,10 @@ export class Artist {
 
   @ApiProperty({ example: false })
   grammy: boolean;
+
+  @Exclude()
+  @ApiProperty({
+    description: 'is not returned',
+  })
+  favoriteId?: string | null;
 }

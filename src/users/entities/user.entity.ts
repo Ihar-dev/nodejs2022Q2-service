@@ -14,7 +14,9 @@ export class User {
   login: string;
 
   @Exclude()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'is not returned',
+  })
   password: string;
 
   @ApiProperty({ example: 1 })

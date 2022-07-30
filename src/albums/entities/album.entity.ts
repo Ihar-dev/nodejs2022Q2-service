@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class Album {
   @ApiProperty({
@@ -15,4 +16,10 @@ export class Album {
 
   @ApiProperty({ example: 'c47daf6f-59ba-4a06-a578-2334fa1502dd' })
   artistId: string | null;
+
+  @Exclude()
+  @ApiProperty({
+    description: 'is not returned',
+  })
+  favoriteId?: string | null;
 }

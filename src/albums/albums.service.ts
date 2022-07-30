@@ -10,6 +10,7 @@ import { Album } from './entities/album.entity';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AlbumsService {
@@ -27,11 +28,12 @@ export class AlbumsService {
     const newAlbum: Album = await this.prisma.album.create({
       data: createUpdateAlbumDto,
     });
-    return newAlbum;
+    return plainToInstance(Album, newAlbum);
   }
 
   public async findAll(): Promise<Album[]> {
-    return this.prisma.album.findMany();
+    const albums = await this.prisma.album.findMany();
+    return albums.map((album) => plainToInstance(Album, album));
   }
 
   public async findOne(id: string): Promise<Album> {
@@ -39,7 +41,7 @@ export class AlbumsService {
       where: { id },
     });
 
-    if (album) return album;
+    if (album) return plainToInstance(Album, album);
     else throw new NotFoundException();
   }
 
@@ -56,7 +58,7 @@ export class AlbumsService {
         where: { id },
         data: createUpdateAlbumDto,
       });
-      return newAlbum;
+      return plainToInstance(Album, newAlbum);
     } else throw new NotFoundException();
   }
 
@@ -70,7 +72,7 @@ export class AlbumsService {
       });
 
       try {
-        await this.favoritesService.removeAlbum(id);
+        // await this.favoritesService.removeAlbum(id);
       } catch (err) {}
       return 'The album has been deleted';
     } else throw new NotFoundException();

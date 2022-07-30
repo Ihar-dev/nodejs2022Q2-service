@@ -9,6 +9,7 @@ import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 import { FavoritesService } from '../favorites/favorites.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class TracksService {
@@ -24,11 +25,12 @@ export class TracksService {
     const newTrack: Track = await this.prisma.track.create({
       data: createUpdateTrackDto,
     });
-    return newTrack;
+    return plainToInstance(Track, newTrack);
   }
 
   public async findAll(): Promise<Track[]> {
-    return this.prisma.track.findMany();
+    const tracks = await this.prisma.track.findMany();
+    return tracks.map((track) => plainToInstance(Track, track));
   }
 
   public async findOne(id: string): Promise<Track> {
@@ -38,7 +40,7 @@ export class TracksService {
       },
     });
 
-    if (track) return track;
+    if (track) return plainToInstance(Track, track);
     else throw new NotFoundException();
   }
 
@@ -57,7 +59,7 @@ export class TracksService {
         where: { id },
         data: createUpdateTrackDto,
       });
-      return newTrack;
+      return plainToInstance(Track, newTrack);
     } else throw new NotFoundException();
   }
 
@@ -71,7 +73,7 @@ export class TracksService {
         where: { id },
       });
       try {
-        await this.favoritesService.removeTrack(id);
+        // await this.favoritesService.removeTrack(id);
       } catch (err) {}
       return 'The track has been deleted';
     } else throw new NotFoundException();

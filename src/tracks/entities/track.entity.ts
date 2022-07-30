@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class Track {
   @ApiProperty({
@@ -18,4 +19,10 @@ export class Track {
 
   @ApiProperty({ example: 123 })
   duration: number;
+
+  @Exclude()
+  @ApiProperty({
+    description: 'is not returned',
+  })
+  favoriteId?: string | null;
 }
