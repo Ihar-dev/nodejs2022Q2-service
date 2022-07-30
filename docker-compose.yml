@@ -1,8 +1,8 @@
 version: '3.4'
 
 volumes:
-  node:
-  postgres-volume:
+  node_modules-volume-prisma:
+  postgres-volume-prisma:
   
 networks:
   app-network:
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     volumes:
       - .:/app
-      - node:/app/node_modules
+      - node_modules-volume-prisma:/app/node_modules
     env_file:
       - .env
     environment:
@@ -56,4 +56,4 @@ services:
     networks:
       - app-network
     volumes:
-      - postgres-volume:/var/lib/postgresql/data
+      - postgres-volume-prisma:/var/lib/postgresql/data
