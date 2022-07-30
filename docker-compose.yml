@@ -11,6 +11,7 @@ networks:
 
 
 services:
+
   api:
     container_name: rest-service-container
     image: rest-service-image
@@ -22,6 +23,8 @@ services:
     volumes:
       - .:/app
       - node:/app/node_modules
+    env_file:
+      - .env
     environment:
       POSTGRES_USER: POSTGRES_USER
       POSTGRES_PASSWORD: POSTGRES_PASSWORD
