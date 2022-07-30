@@ -10,23 +10,6 @@ networks:
     driver: bridge
 
 services:
-  postgres:
-    container_name: postgres-container
-    image: postgres-image
-    build: 
-      dockerfile: ./postgress/Dockerfile
-      context: .
-    restart: unless-stopped
-    ports: 
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    networks:
-      - app-network
-    volumes:
-      - postgres-volume:/var/lib/postgresql/data
 
   api:
     container_name: rest-service-container
@@ -53,3 +36,21 @@ services:
       - app-network
     depends_on:
       - postgres
+
+  postgres:
+    container_name: postgres-container
+    image: postgres-image
+    build: 
+      dockerfile: ./postgress/Dockerfile
+      context: .
+    restart: unless-stopped
+    ports: 
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - app-network
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
