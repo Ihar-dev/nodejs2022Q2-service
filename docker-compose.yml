@@ -1,0 +1,59 @@
+version: '3.4'
+
+volumes:
+  node_modules-volume-prisma:
+  postgres-volume-prisma:
+  
+networks:
+  app-network:
+    name: rest-service-network
+    driver: bridge
+
+
+services:
+
+  api:
+    container_name: rest-service-container-prisma
+    image: rest-service-image-prisma
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - node_modules-volume-prisma:/app/node_modules
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: POSTGRES_USER
+      POSTGRES_PASSWORD: POSTGRES_PASSWORD
+      POSTGRES_DB: POSTGRES_DB
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+  
+  postgres:
+    container_name: postgres-container-prisma
+    image: postgres-image-prisma
+    build: 
+      dockerfile: ./postgress/Dockerfile
+      context: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports: 
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - app-network
+    volumes:
+      - postgres-volume-prisma:/var/lib/postgresql/data
