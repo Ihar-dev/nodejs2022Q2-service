@@ -1,26 +1,13 @@
-import {
-  forwardRef,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
 import { Album } from './entities/album.entity';
-import { TracksService } from '../tracks/tracks.service';
-import { FavoritesService } from '../favorites/favorites.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AlbumsService {
-  constructor(
-    @Inject(forwardRef(() => TracksService))
-    private readonly tracksService: TracksService,
-    @Inject(forwardRef(() => FavoritesService))
-    private readonly favoritesService: FavoritesService,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   public async create(
     createUpdateAlbumDto: CreateUpdateAlbumDto,
@@ -71,20 +58,7 @@ export class AlbumsService {
         where: { id },
       });
 
-      try {
-        // await this.favoritesService.removeAlbum(id);
-      } catch (err) {}
       return 'The album has been deleted';
     } else throw new NotFoundException();
-  }
-
-  public async removeArtist(id): Promise<void> {
-    const albums = await this.findAll();
-    const album = albums.find((album) => album.artistId === id);
-
-    if (album) {
-      album.artistId = null;
-      await this.update(album.id, album);
-    }
   }
 }
