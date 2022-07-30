@@ -70,3 +70,47 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+***
+# Recommendations from the developer:
+
+## Installation:
+
+Use your terminal command line interface
+
+$ git clone https://github.com/Ihar-dev/nodejs2022Q2-service.git
+
+or
+
+$ git clone git@github.com:Ihar-dev/nodejs2022Q2-service.git
+
+then
+
+$ cd nodejs2022Q2-service
+
+$ git checkout containerization-docker
+
+$ npm i
+
+also you need docker to be installed and started
+https://www.docker.com/get-started/
+
+## How to Use The Application:
+
+$ docker-compose up
+
+## Testing:
+
+in an additional terminal after the application starting
+
+$ cd nodejs2022Q2-service
+
+$ npm run test
+
+##  Scanning the image for vulnerabilities:
+
+in an additional terminal after the application starting
+
+$ cd nodejs2022Q2-service
+
+$ npm run scan
