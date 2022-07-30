@@ -12,10 +12,6 @@ import { ArtistsService } from '../artists/artists.service';
 import { FavoritesResponse } from './entities/favorite-response.entity';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { FavoritesRecord } from './entities/favorite-record.entity';
-import { Track } from 'src/tracks/entities/track.entity';
-import { Album } from 'src/albums/entities/album.entity';
-import { Artist } from 'src/artists/entities/artist.entity';
-import { plainToInstance } from 'class-transformer';
 
 const NO_EXISTING_CODE = 422;
 
@@ -98,32 +94,25 @@ export class FavoritesService {
     if (favoritesArray.length) {
       const favoritesRecord: FavoritesRecord = favoritesArray[0];
       const favoriteId = favoritesRecord.id;
-      favorites.artists = await this.prisma.artist.findMany({
-        where: { favoriteId },
-      });
+
+      await Promise.all([
+        (favorites.artists = await this.prisma.artist.findMany({
+          where: { favoriteId },
+        })),
+        (favorites.albums = await this.prisma.album.findMany({
+          where: { favoriteId },
+        })),
+        (favorites.tracks = await this.prisma.track.findMany({
+          where: { favoriteId },
+        })),
+      ]);
+
       favorites.artists.map((artist) => delete artist.favoriteId);
-
-      favorites.albums = await this.prisma.album.findMany({
-        where: { favoriteId },
-      });
       favorites.albums.map((album) => delete album.favoriteId);
-
-      favorites.tracks = await this.prisma.track.findMany({
-        where: { favoriteId },
-      });
       favorites.tracks.map((track) => delete track.favoriteId);
     }
 
     return favorites;
-  }
-
-  private async getFavoriteId(): Promise<string> {
-    const favoritesArray = await this.prisma.favorites.findMany();
-    let favoritesRecord: FavoritesRecord;
-    if (favoritesArray.length) favoritesRecord = favoritesArray[0];
-    else favoritesRecord = await this.prisma.favorites.create({ data: {} });
-    const favoriteId = favoritesRecord.id;
-    return favoriteId;
   }
 
   public async removeTrack(id: string): Promise<string> {
@@ -169,6 +158,15 @@ export class FavoritesService {
     } catch (err) {
       throw new NotFoundException();
     }
+  }
+
+  private async getFavoriteId(): Promise<string> {
+    const favoritesArray = await this.prisma.favorites.findMany();
+    let favoritesRecord: FavoritesRecord;
+    if (favoritesArray.length) favoritesRecord = favoritesArray[0];
+    else favoritesRecord = await this.prisma.favorites.create({ data: {} });
+    const favoriteId = favoritesRecord.id;
+    return favoriteId;
   }
 
   private getDefaultFavorites(): FavoritesResponse {
