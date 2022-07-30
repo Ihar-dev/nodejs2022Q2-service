@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install --force
+RUN npm install
 
 EXPOSE $PORT
 
