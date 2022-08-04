@@ -5,6 +5,7 @@ import { User } from 'src/users/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 
 import { JwtService } from '@nestjs/jwt';
+import { Tokens } from './entities/tokens.entity';
 
 @Injectable()
 export class AuthService {
@@ -24,17 +25,33 @@ export class AuthService {
     return 'Successful signup.';
   }
 
-  public async login(createUserDto: CreateUserDto): Promise<string> {
+  public async login(createUserDto: CreateUserDto): Promise<Tokens> {
     const users: User[] = await this.prisma.user.findMany();
     const user = users.find((user) => user.login === createUserDto.login);
 
-    if (user) {
+    if (user && user.password === createUserDto.password) {
       const payload = { id: user.id, login: user.login };
-      const options = {
+      const accessTokenOptions = {
         expiresIn: process.env.TOKEN_EXPIRE_TIME,
         secret: process.env.JWT_SECRET_KEY,
       };
-      return this.jwtService.sign(payload, options);
+      const refreshTokenOptions = {
+        expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
+        secret: process.env.JWT_SECRET_REFRESH_KEY,
+      };
+      const accessToken = await this.jwtService.signAsync(
+        payload,
+        accessTokenOptions,
+      );
+      const refreshToken = await this.jwtService.signAsync(
+        payload,
+        refreshTokenOptions,
+      );
+
+      return {
+        accessToken,
+        refreshToken,
+      };
     } else throw new ForbiddenException();
   }
 }

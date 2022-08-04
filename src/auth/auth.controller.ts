@@ -9,6 +9,7 @@ import {
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Tokens } from './entities/tokens.entity';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -38,14 +39,18 @@ export class AuthController {
   })
   @ApiOkResponse({
     description: 'Successful operation.',
+    type: Tokens,
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad request.',
   })
   @ApiForbiddenResponse({
-    description: 'Bad request.',
+    description: 'Incorrect login or password.',
   })
   login(
     @Body()
     createUserDto: CreateUserDto,
-  ): Promise<string> {
+  ): Promise<Tokens> {
     return this.authService.login(createUserDto);
   }
 }
