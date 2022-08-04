@@ -2,6 +2,8 @@ import { Body, Controller, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
@@ -24,7 +26,26 @@ export class AuthController {
   signup(
     @Body()
     createUserDto: CreateUserDto,
-  ) {
+  ): Promise<string> {
     return this.authService.signup(createUserDto);
+  }
+
+  @Post('login')
+  @ApiOperation({
+    summary: 'Login',
+    description:
+      'Logins a user and returns Access token and Refresh token (optionally).',
+  })
+  @ApiOkResponse({
+    description: 'Successful operation.',
+  })
+  @ApiForbiddenResponse({
+    description: 'Bad request.',
+  })
+  login(
+    @Body()
+    createUserDto: CreateUserDto,
+  ): Promise<string> {
+    return this.authService.login(createUserDto);
   }
 }
