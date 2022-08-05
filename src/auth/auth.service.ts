@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Tokens } from './entities/tokens.entity';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RefreshAnswer } from './entities/refresh-answer.entity';
+import { Payload } from './entities/payload.entity';
 
 @Injectable()
 export class AuthService {
@@ -37,27 +38,8 @@ export class AuthService {
 
     if (user && user.password === createUserDto.password) {
       const payload = { id: user.id, login: user.login };
-      const accessTokenOptions = {
-        expiresIn: process.env.TOKEN_EXPIRE_TIME,
-        secret: process.env.JWT_SECRET_KEY,
-      };
-      const refreshTokenOptions = {
-        expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
-        secret: process.env.JWT_SECRET_REFRESH_KEY,
-      };
-      const accessToken = await this.jwtService.signAsync(
-        payload,
-        accessTokenOptions,
-      );
-      const refreshToken = await this.jwtService.signAsync(
-        payload,
-        refreshTokenOptions,
-      );
 
-      return {
-        accessToken,
-        refreshToken,
-      };
+      return this.getTokens(payload);
     } else throw new ForbiddenException();
   }
 
@@ -73,30 +55,37 @@ export class AuthService {
 
         const payload = { id: answer.id, login: answer.login };
 
-        const accessTokenOptions = {
-          expiresIn: process.env.TOKEN_EXPIRE_TIME,
-          secret: process.env.JWT_SECRET_KEY,
-        };
-        const refreshTokenOptions = {
-          expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
-          secret: process.env.JWT_SECRET_REFRESH_KEY,
-        };
-        const accessToken = await this.jwtService.signAsync(
-          payload,
-          accessTokenOptions,
-        );
-        const refreshToken = await this.jwtService.signAsync(
-          payload,
-          refreshTokenOptions,
-        );
-
-        return {
-          accessToken,
-          refreshToken,
-        };
+        return this.getTokens(payload);
       } catch (err) {
         throw new ForbiddenException('Refresh token is invalid or expired.');
       }
     } else throw new UnauthorizedException();
+  }
+
+  private async getTokens(payload: Payload): Promise<Tokens> {
+    const accessTokenOptions = {
+      expiresIn: process.env.TOKEN_EXPIRE_TIME,
+      secret: process.env.JWT_SECRET_KEY,
+    };
+
+    const refreshTokenOptions = {
+      expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
+      secret: process.env.JWT_SECRET_REFRESH_KEY,
+    };
+
+    const accessToken = await this.jwtService.signAsync(
+      payload,
+      accessTokenOptions,
+    );
+
+    const refreshToken = await this.jwtService.signAsync(
+      payload,
+      refreshTokenOptions,
+    );
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 }
