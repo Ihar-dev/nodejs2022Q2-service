@@ -21,7 +21,7 @@ import {
 
 import { FavoritesService } from './favorites.service';
 import { FavoritesResponse } from './entities/favorite-response.entity';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
 @ApiTags('Favorites')
 @Controller('favs')

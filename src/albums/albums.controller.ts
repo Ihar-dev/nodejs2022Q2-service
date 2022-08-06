@@ -19,7 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
 import { AlbumsService } from './albums.service';
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';

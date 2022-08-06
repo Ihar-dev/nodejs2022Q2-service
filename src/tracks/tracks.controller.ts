@@ -23,7 +23,7 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
 @ApiTags('Tracks')
 @Controller('track')

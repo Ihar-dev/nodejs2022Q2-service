@@ -14,7 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { Payload } from './entities/payload.entity';
 import { Tokens } from './entities/tokens.entity';
-import { AccessTokenGuard } from './guards/access-token.guard';
+import { AccessTokenGuard } from '../jwt/guards/access-token.guard';
 
 @ApiTags('Authorization')
 @Controller('auth')

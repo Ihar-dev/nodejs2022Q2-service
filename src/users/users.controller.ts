@@ -25,7 +25,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 import { UpdatedUser } from './entities/updated-user.entity';
-import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
+import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
 @ApiTags('Users')
 @Controller('user')

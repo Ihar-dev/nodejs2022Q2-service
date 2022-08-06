@@ -3,8 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
 
-import { AuthService } from '../auth.service';
-import { Payload } from '../entities/payload.entity';
+import { AuthService } from '../../auth/auth.service';
+import { Payload } from '../../auth/entities/payload.entity';
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private authService: AuthService) {
