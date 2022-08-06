@@ -3,32 +3,29 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-
-import { PrismaService } from 'src/prisma/prisma.service';
-import { User } from 'src/users/entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
-
+import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Tokens } from './entities/tokens.entity';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RefreshAnswer } from './entities/refresh-answer.entity';
 import { Payload } from './entities/payload.entity';
 
+import { PrismaService } from 'src/prisma/prisma.service';
+import { User } from 'src/users/entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UsersService } from 'src/users/users.service';
+
 @Injectable()
 export class AuthService {
   private jwtService: JwtService = new JwtService();
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private usersService: UsersService,
+  ) {}
 
   public async signup(createUserDto: CreateUserDto): Promise<string> {
-    await this.prisma.user.create({
-      data: {
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        ...createUserDto,
-      },
-    });
-
+    await this.usersService.create(createUserDto);
     return 'Successful signup.';
   }
 
@@ -36,10 +33,16 @@ export class AuthService {
     const users: User[] = await this.prisma.user.findMany();
     const user = users.find((user) => user.login === createUserDto.login);
 
-    if (user && user.password === createUserDto.password) {
-      const payload = { id: user.id, login: user.login };
+    if (user) {
+      const isPasswordCorrect = await bcrypt.compare(
+        createUserDto.password,
+        user.password,
+      );
 
-      return this.getTokens(payload);
+      if (isPasswordCorrect) {
+        const payload = { id: user.id, login: user.login };
+        return this.getTokens(payload);
+      } else throw new ForbiddenException();
     } else throw new ForbiddenException();
   }
 

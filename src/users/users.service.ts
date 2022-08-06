@@ -22,14 +22,14 @@ export class UsersService {
   public async create(createUserDto: CreateUserDto): Promise<User> {
     const cryptSalt: number = +process.env.CRYPT_SALT;
 
-    const password = await bcrypt.hash(createUserDto.password, cryptSalt);
+    const hashPassword = await bcrypt.hash(createUserDto.password, cryptSalt);
 
     delete createUserDto.password;
 
     const newUser: User = await this.prisma.user.create({
       data: {
         login: createUserDto.login,
-        password,
+        password: hashPassword,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       },
@@ -59,12 +59,12 @@ export class UsersService {
     });
 
     if (user) {
-      const passwordCorrect = await bcrypt.compare(
+      const isPasswordCorrect = await bcrypt.compare(
         updatePasswordDto.oldPassword,
         user.password,
       );
 
-      if (passwordCorrect) {
+      if (isPasswordCorrect) {
         user.password = updatePasswordDto.newPassword;
         user.version++;
         user.updatedAt = Date.now();
