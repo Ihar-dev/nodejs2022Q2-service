@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
@@ -19,11 +20,18 @@ export class UsersService {
   }
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
+    const cryptSalt: number = +process.env.CRYPT_SALT;
+
+    const password = await bcrypt.hash(createUserDto.password, cryptSalt);
+
+    delete createUserDto.password;
+
     const newUser: User = await this.prisma.user.create({
       data: {
+        login: createUserDto.login,
+        password,
         createdAt: Date.now(),
         updatedAt: Date.now(),
-        ...createUserDto,
       },
     });
     return plainToInstance(User, newUser);
@@ -51,7 +59,12 @@ export class UsersService {
     });
 
     if (user) {
-      if (updatePasswordDto.oldPassword === user.password) {
+      const passwordCorrect = await bcrypt.compare(
+        updatePasswordDto.oldPassword,
+        user.password,
+      );
+
+      if (passwordCorrect) {
         user.password = updatePasswordDto.newPassword;
         user.version++;
         user.updatedAt = Date.now();
