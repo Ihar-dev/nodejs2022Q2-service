@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -24,12 +25,14 @@ import { UsersService } from './users.service';
 import { CreateUserDto, UpdatePasswordDto } from './dto';
 import { User } from './entities/user.entity';
 import { UpdatedUser } from './entities/updated-user.entity';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 @ApiTags('Users')
 @Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   @ApiOperation({ summary: 'get all users', description: 'Gets all users.' })
   @ApiOkResponse({
@@ -40,6 +43,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(':userId')
   @ApiOperation({
     summary: 'get single user by id',
@@ -59,6 +63,7 @@ export class UsersController {
     return this.usersService.findOne(userId);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   @ApiOperation({ summary: 'create user', description: 'Creates a new user.' })
   @ApiCreatedResponse({
@@ -76,6 +81,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Put(':userId')
   // eslint-disable-next-line prettier/prettier
   @ApiOperation({
@@ -98,6 +104,7 @@ export class UsersController {
     return this.usersService.update(userId, updatePasswordDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':userId')
   @HttpCode(204)
   @ApiOperation({ summary: 'delete user', description: 'Deletes user by ID.' })

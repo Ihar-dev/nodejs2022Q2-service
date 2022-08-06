@@ -8,6 +8,7 @@ import {
   HttpCode,
   Put,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -18,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 import { ArtistsService } from './artists.service';
 import { CreateUpdateArtistDto } from './dto/create-update-artist.dto';
@@ -28,6 +30,7 @@ import { Artist } from './entities/artist.entity';
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   @ApiOperation({
     summary: 'create new artist',
@@ -47,6 +50,7 @@ export class ArtistsController {
     return this.artistsService.create(createUpdateArtistDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   @ApiOperation({
     summary: 'get all artists',
@@ -60,6 +64,7 @@ export class ArtistsController {
     return this.artistsService.findAll();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'get single artist by id',
@@ -79,6 +84,7 @@ export class ArtistsController {
     return this.artistsService.findOne(id);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Put(':id')
   @ApiOperation({
     summary: 'update artist info',
@@ -99,6 +105,7 @@ export class ArtistsController {
     return this.artistsService.update(id, createUpdateArtistDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   @HttpCode(204)
   @ApiOperation({

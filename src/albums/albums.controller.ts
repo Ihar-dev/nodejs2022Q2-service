@@ -8,6 +8,7 @@ import {
   HttpCode,
   Put,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -18,6 +19,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 import { AlbumsService } from './albums.service';
 import { CreateUpdateAlbumDto } from './dto/create-album.dto';
@@ -28,6 +30,7 @@ import { Album } from './entities/album.entity';
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   @ApiOperation({
     summary: 'create new album',
@@ -45,6 +48,7 @@ export class AlbumsController {
     return this.albumsService.create(createUpdateAlbumDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   @ApiOperation({ summary: 'get all albums', description: 'Gets all albums.' })
   @ApiOkResponse({
@@ -55,6 +59,7 @@ export class AlbumsController {
     return this.albumsService.findAll();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'get single album by id',
@@ -74,6 +79,7 @@ export class AlbumsController {
     return this.albumsService.findOne(id);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Put(':id')
   @ApiOperation({
     summary: 'update album info',
@@ -94,6 +100,7 @@ export class AlbumsController {
     return this.albumsService.update(id, createUpdateAlbumDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   @HttpCode(204)
   @ApiOperation({

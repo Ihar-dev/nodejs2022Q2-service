@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { Payload } from './entities/payload.entity';
 import { Tokens } from './entities/tokens.entity';
+import { AccessTokenGuard } from './guards/access-token.guard';
 
 @ApiTags('Authorization')
 @Controller('auth')
@@ -57,6 +58,7 @@ export class AuthController {
     return this.authService.login(createUserDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post('refresh')
   @ApiOperation({
     summary: 'Refresh',
@@ -79,6 +81,7 @@ export class AuthController {
     return this.authService.refresh(refreshTokenDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post('access')
   access(
     @Body()

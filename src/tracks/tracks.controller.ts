@@ -8,6 +8,7 @@ import {
   HttpCode,
   Put,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -22,12 +23,14 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
+import { AccessTokenGuard } from 'src/auth/guards/access-token.guard';
 
 @ApiTags('Tracks')
 @Controller('track')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Get()
   @ApiOperation({ summary: 'get all tracks', description: 'Gets all tracks.' })
   @ApiOkResponse({
@@ -38,6 +41,7 @@ export class TracksController {
     return this.tracksService.findAll();
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'get single track by id',
@@ -57,6 +61,7 @@ export class TracksController {
     return this.tracksService.findOne(id);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Post()
   @ApiOperation({
     summary: 'create new track',
@@ -74,6 +79,7 @@ export class TracksController {
     return this.tracksService.create(createUpdateTrackDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Put(':id')
   @ApiOperation({
     summary: 'update track info',
@@ -94,6 +100,7 @@ export class TracksController {
     return this.tracksService.update(id, createUpdateTrackDto);
   }
 
+  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   @HttpCode(204)
   @ApiOperation({
