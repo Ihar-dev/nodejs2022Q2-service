@@ -14,6 +14,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from 'src/users/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
+import { AccessTokenDto } from './dto/access-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -63,6 +64,25 @@ export class AuthService {
         throw new ForbiddenException('Refresh token is invalid or expired.');
       }
     } else throw new UnauthorizedException();
+  }
+
+  public async verifyAccessToken(
+    accessTokenDto: AccessTokenDto,
+  ): Promise<Payload> {
+    try {
+      const answer: RefreshAnswer = await this.jwtService.verifyAsync(
+        accessTokenDto.accessToken,
+        {
+          secret: process.env.JWT_SECRET_KEY,
+        },
+      );
+
+      const payload = { id: answer.id, login: answer.login };
+
+      return payload;
+    } catch (err) {
+      throw new UnauthorizedException('Access token is invalid or expired.');
+    }
   }
 
   private async getTokens(payload: Payload): Promise<Tokens> {

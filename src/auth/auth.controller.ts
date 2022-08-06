@@ -9,8 +9,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
+import { AccessTokenDto } from './dto/access-token.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { Payload } from './entities/payload.entity';
 import { Tokens } from './entities/tokens.entity';
 
 @ApiTags('Authorization')
@@ -75,5 +77,13 @@ export class AuthController {
     refreshTokenDto: RefreshTokenDto,
   ): Promise<Tokens> {
     return this.authService.refresh(refreshTokenDto);
+  }
+
+  @Post('access')
+  access(
+    @Body()
+    accessTokenDto: AccessTokenDto,
+  ): Promise<Payload> {
+    return this.authService.verifyAccessToken(accessTokenDto);
   }
 }
