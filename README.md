@@ -88,7 +88,7 @@ then
 
 $ cd nodejs2022Q2-service
 
-$ git checkout postgresql-orm
+$ git checkout authentication-authorization
 
 $ npm i
 
@@ -97,7 +97,8 @@ https://www.docker.com/get-started/
 
 ## How to Use The Application:
 
-$ docker-compose up
+#### $ docker compose up postgres -d
+$ npm run start:dev
 
 ## Testing:
 
@@ -105,4 +106,4 @@ in an additional terminal after the application starting
 
 $ cd nodejs2022Q2-service
 
-$ npm run test
+$ npm run test:auth
