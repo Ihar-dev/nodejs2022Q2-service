@@ -11,6 +11,37 @@ async function bootstrap() {
     logger: new LoggingService(),
   });
 
+  process.on('uncaughtException', (error) => {
+    this.logger.error(
+      `Uncaught Exception Thrown: message: ${error.message}, stack: ${error.stack}.`,
+    );
+    this.logger.warn(
+      `Uncaught Exception Thrown: message: ${error.message}, stack: ${error.stack}.`,
+    );
+    this.logger.debug(
+      `Uncaught Exception Thrown: message: ${error.message}, stack: ${error.stack}.`,
+    );
+    this.logger.verbose(
+      `Uncaught Exception Thrown: message: ${error.message}, stack: ${error.stack}.`,
+    );
+    process.exit(1);
+  });
+
+  process.on('unhandledRejection', (reason, promise) => {
+    this.logger.error(
+      `Unhandled Rejection: reason: ${reason}, promise: ${promise}.`,
+    );
+    this.logger.warn(
+      `Unhandled Rejection: reason: ${reason}, promise: ${promise}.`,
+    );
+    this.logger.debug(
+      `Unhandled Rejection: reason: ${reason}, promise: ${promise}.`,
+    );
+    this.logger.verbose(
+      `Unhandled Rejection: reason: ${reason}, promise: ${promise}.`,
+    );
+  });
+
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   const port = process.env.PORT || 4000;
 
