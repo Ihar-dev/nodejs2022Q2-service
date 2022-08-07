@@ -9,11 +9,7 @@ export class LoggerMiddleware implements NestMiddleware {
 
   use(req: Request, res: Response, next: NextFunction) {
     const { body, originalUrl, query } = req;
-    const queryObj = inspect(query, {
-      showHidden: false,
-      depth: null,
-      colors: true,
-    });
+    const queryObj = inspect(query, { showHidden: false, depth: null });
     let logString = `Request details: host: ${
       req.headers.host
     }, url: ${originalUrl}, body: ${inspect(
