@@ -88,7 +88,7 @@ then
 
 $ cd nodejs2022Q2-service
 
-$ git checkout authentication-authorization
+$ git checkout logging-error_handling
 
 $ npm i
 
