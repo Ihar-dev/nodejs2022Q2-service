@@ -5,6 +5,7 @@ import { sep } from 'path';
 import { cwd } from 'process';
 import { statSync } from 'fs';
 
+const LOGIN_SIZE_СOEFFICIENT = 1000;
 @Injectable()
 export class LoggingService extends ConsoleLogger {
   log(message: string): void {
@@ -46,7 +47,7 @@ export class LoggingService extends ConsoleLogger {
         fileSize = statSync(pathToLogFile).size;
       } catch {}
 
-      if (fileSize >= +process.env.LOGIN_FILE_SIZE) {
+      if (fileSize >= +process.env.LOGIN_FILE_SIZE * LOGIN_SIZE_СOEFFICIENT) {
         newLogFile = `${currentTime}.log`;
         process.env.CURRENT_LOGIN_FILE = newLogFile;
       }
@@ -62,7 +63,7 @@ export class LoggingService extends ConsoleLogger {
         fileSize = statSync(pathToLogFile).size;
       } catch {}
 
-      if (fileSize >= +process.env.LOGIN_FILE_SIZE) {
+      if (fileSize >= +process.env.LOGIN_FILE_SIZE * LOGIN_SIZE_СOEFFICIENT) {
         newLogFile = `${currentTime}.errors.log`;
         process.env.CURRENT_ERROR_LOGIN_FILE = newLogFile;
       }
