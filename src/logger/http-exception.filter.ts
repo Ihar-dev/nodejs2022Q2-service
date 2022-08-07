@@ -36,5 +36,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionString = `Request details: host: ${request.headers.host}, url: ${originalUrl},
      query parameters: ${queryObj}, Response details: message: ${statusMessage}, http status code: ${status}.`;
     this.logger.error(exceptionString);
+    this.logger.warn(exceptionString);
+    this.logger.debug(exceptionString);
+    this.logger.verbose(exceptionString);
   }
 }

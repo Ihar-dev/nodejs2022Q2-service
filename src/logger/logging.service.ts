@@ -9,13 +9,38 @@ const LOGIN_SIZE_СOEFFICIENT = 1000;
 @Injectable()
 export class LoggingService extends ConsoleLogger {
   log(message: string): void {
-    super.log(message);
-    this.writeToFile(message, 'log');
+    if (+process.env.LOGIN_LEVEL >= 1) {
+      super.log(message);
+      this.writeToFile(message, 'log');
+    }
   }
 
   error(message: string): void {
-    super.error(message);
-    this.writeToFile(message, 'error');
+    if (+process.env.LOGIN_LEVEL >= 2) {
+      super.error(message);
+      this.writeToFile(`error ${message}`, 'error');
+    }
+  }
+
+  warn(message: string): void {
+    if (+process.env.LOGIN_LEVEL >= 3) {
+      super.warn(message);
+      this.writeToFile(`warn ${message}`, 'error');
+    }
+  }
+
+  debug(message: string): void {
+    if (+process.env.LOGIN_LEVEL >= 4) {
+      super.debug(message);
+      this.writeToFile(`debug ${message}`, 'error');
+    }
+  }
+
+  verbose(message: string): void {
+    if (+process.env.LOGIN_LEVEL >= 5) {
+      super.verbose(message);
+      this.writeToFile(`verbose ${message}`, 'error');
+    }
   }
 
   private async writeToFile(message: string, method: string): Promise<void> {
