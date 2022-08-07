@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { inspect } from 'util';
 import { LoggingService } from './logging.service';
 
@@ -10,12 +10,17 @@ export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const { body, originalUrl, query } = req;
     const queryObj = inspect(query);
-    const logString = `Request details: host: ${
+    let logString = `Request details: host: ${
       req.headers.host
     }, url: ${originalUrl}, body: ${inspect(
       body,
-    )}, query parameters: ${queryObj}`;
-    this.logger.log(logString);
+    )}, query parameters: ${queryObj}.`;
+
+    res.on('finish', () => {
+      const { statusCode } = res;
+      logString += ` Response details: status code: ${statusCode}.`;
+      this.logger.log(logString);
+    });
     next();
   }
 }
