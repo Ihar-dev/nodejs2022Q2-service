@@ -17,8 +17,8 @@ export class LoggerMiddleware implements NestMiddleware {
     )}, query parameters: ${queryObj}.`;
 
     res.on('finish', () => {
-      const { statusCode } = res;
-      logString += ` Response details: status code: ${statusCode}.`;
+      const { statusCode, statusMessage } = res;
+      logString += ` Response details: message: ${statusMessage}, status code: ${statusCode}.`;
       this.logger.log(logString);
     });
     next();
