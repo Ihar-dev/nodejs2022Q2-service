@@ -1,0 +1,13 @@
+/.git
+/.vscode
+/node_modules
+/test
+/.dockerignore
+/.env.example
+/.eslintrc.js
+/.gitignore
+/.prettierrc
+/docker-compose*
+/Dockerfile*
+/npm-debug.log
+README.md
