@@ -16,8 +16,8 @@ services:
     container_name: rest-service-container-prisma
     image: rest-service-image-prisma
     build:
-      dockerfile: Dockerfile
       context: .
+      dockerfile: Dockerfile
       target: development
     restart: unless-stopped
     volumes:
@@ -42,8 +42,8 @@ services:
     container_name: postgres-container-prisma
     image: postgres-image-prisma
     build: 
-      dockerfile: ./postgress/Dockerfile
       context: .
+      dockerfile: ./postgress/Dockerfile
     restart: unless-stopped
     env_file:
       - .env

@@ -25,6 +25,7 @@ import { CreateUpdateTrackDto } from './dto/create-update-track.dto';
 import { Track } from './entities/track.entity';
 import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
+@UseGuards(AccessTokenGuard)
 @ApiTags('Tracks')
 @Controller('track')
 export class TracksController {
@@ -41,7 +42,6 @@ export class TracksController {
     return this.tracksService.findAll();
   }
 
-  @UseGuards(AccessTokenGuard)
   @Get(':id')
   @ApiOperation({
     summary: 'get single track by id',
@@ -61,7 +61,6 @@ export class TracksController {
     return this.tracksService.findOne(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post()
   @ApiOperation({
     summary: 'create new track',
@@ -79,7 +78,6 @@ export class TracksController {
     return this.tracksService.create(createUpdateTrackDto);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Put(':id')
   @ApiOperation({
     summary: 'update track info',
@@ -100,7 +98,6 @@ export class TracksController {
     return this.tracksService.update(id, createUpdateTrackDto);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Delete(':id')
   @HttpCode(204)
   @ApiOperation({
