@@ -31,8 +31,9 @@ export class AuthService {
   }
 
   public async login(createUserDto: CreateUserDto): Promise<Tokens> {
-    const users: User[] = await this.prisma.user.findMany();
-    const user = users.find((user) => user.login === createUserDto.login);
+    const user: User = await this.prisma.user.findFirst({
+      where: { login: createUserDto.login },
+    });
 
     if (user) {
       const isPasswordCorrect = await bcrypt.compare(

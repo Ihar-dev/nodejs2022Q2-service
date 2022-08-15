@@ -23,12 +23,12 @@ import { FavoritesService } from './favorites.service';
 import { FavoritesResponse } from './entities/favorite-response.entity';
 import { AccessTokenGuard } from 'src/jwt/guards/access-token.guard';
 
+@UseGuards(AccessTokenGuard)
 @ApiTags('Favorites')
 @Controller('favs')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
-  @UseGuards(AccessTokenGuard)
   @Post('track/:id')
   @ApiOperation({
     summary: 'add track to the favorites',
@@ -50,7 +50,6 @@ export class FavoritesController {
     return this.favoritesService.addTrack(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('album/:id')
   @ApiOperation({
     summary: 'add album to the favorites',
@@ -72,7 +71,6 @@ export class FavoritesController {
     return this.favoritesService.addAlbum(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('artist/:id')
   @ApiOperation({
     summary: 'add artist to the favorites',
@@ -94,7 +92,6 @@ export class FavoritesController {
     return this.favoritesService.addArtist(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Get()
   @ApiOperation({
     summary: 'get all favorites',
@@ -108,7 +105,6 @@ export class FavoritesController {
     return this.favoritesService.findAll();
   }
 
-  @UseGuards(AccessTokenGuard)
   @Delete('track/:id')
   @HttpCode(204)
   @ApiOperation({
@@ -128,7 +124,6 @@ export class FavoritesController {
     return this.favoritesService.removeTrack(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Delete('album/:id')
   @HttpCode(204)
   @ApiOperation({
@@ -148,7 +143,6 @@ export class FavoritesController {
     return this.favoritesService.removeAlbum(id);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Delete('artist/:id')
   @HttpCode(204)
   @ApiOperation({
